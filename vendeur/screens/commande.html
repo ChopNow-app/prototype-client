@@ -129,9 +129,12 @@
       </div>
     </div>
 
-    <div class="action-row">
-      <button class="btn-refuse" onclick="refuse()">✕ Refuser</button>
-      <button class="btn-accept" onclick="accept()">✓ Accepter</button>
+    <div>
+      <div class="action-row" style="margin-bottom:10px">
+        <button class="btn-refuse" onclick="refuse()">✕ Refuser</button>
+        <button class="btn-accept" onclick="accept()">✓ Accepter</button>
+      </div>
+      <button style="width:100%;padding:13px;background:none;border:1px solid var(--border2);border-radius:var(--r);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer" onclick="goBack()">← Retour au dashboard</button>
     </div>
 
   </div>
@@ -169,6 +172,11 @@
     clearInterval(timer);
     showToast('Commande refusée');
     setTimeout(() => navigate('dashboard', true), 800);
+  }
+
+  function goBack() {
+    clearInterval(timer);
+    navigate('dashboard', true);
   }
 </script>
 </body>

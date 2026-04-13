@@ -10,7 +10,13 @@
   <link rel="stylesheet" href="../../css/layout.css"/>
   <link rel="stylesheet" href="../../css/components.css"/>
   <style>
-    .screen { padding: 24px 20px 32px; justify-content: space-between; }
+    .screen { padding: 0 0 32px; justify-content: space-between; }
+
+    /* Top nav */
+    .top-nav { display: flex; align-items: center; gap: 12px; padding: 18px 20px 14px; flex-shrink: 0; }
+    .top-nav-title { font-size: 17px; font-weight: 800; flex: 1; }
+
+    .content-wrap { padding: 0 20px; flex: 1; }
 
     /* Order header */
     .order-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -63,9 +69,12 @@
     .sstep.done .sstep-lbl, .sstep.now .sstep-lbl { color: var(--text); }
 
     /* CTA */
+    .cta-wrap { padding: 0 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px; }
     .btn-ready { width: 100%; padding: 17px; background: linear-gradient(135deg, #16a34a, #22c55e); border: none; border-radius: var(--r); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 28px rgba(34,197,94,.35); transition: transform .1s, opacity .2s; }
     .btn-ready:active { transform: scale(.97); }
     .btn-ready:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+    .btn-cancel { width: 100%; padding: 14px; background: none; border: 1px solid var(--border2); border-radius: var(--r); color: var(--muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s; }
+    .btn-cancel:active { background: var(--card2); }
   </style>
 </head>
 <body>
@@ -76,7 +85,12 @@
   </div>
   <div class="screen">
 
-    <div>
+    <div class="top-nav">
+      <button class="back-btn" onclick="navigate('dashboard', true)">←</button>
+      <span class="top-nav-title">Préparation</span>
+    </div>
+
+    <div class="content-wrap">
       <div class="order-hdr">
         <div>
           <div class="order-hdr-id">Commande #4872</div>
@@ -128,9 +142,12 @@
       </div>
     </div>
 
-    <button class="btn-ready" id="btnReady" onclick="markReady()" disabled>
-      Commande prête — Appeler livreur 🏍️
-    </button>
+    <div class="cta-wrap">
+      <button class="btn-ready" id="btnReady" onclick="markReady()" disabled>
+        Commande prête — Appeler livreur 🏍️
+      </button>
+      <button class="btn-cancel" onclick="cancelPrep()">Annuler la préparation</button>
+    </div>
 
   </div>
 </div>
@@ -179,6 +196,11 @@
     document.getElementById('btnReady').disabled = true;
     showToast('Livreur notifié — en route vers toi ✅');
     setTimeout(() => navigate('dashboard', true), 2000);
+  }
+
+  function cancelPrep() {
+    showToast('Préparation annulée');
+    setTimeout(() => navigate('dashboard', true), 800);
   }
 </script>
 </body>
