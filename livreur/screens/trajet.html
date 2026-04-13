@@ -14,42 +14,59 @@
 
     /* Map zone */
     .map-zone {
-      height: 200px; flex-shrink: 0;
-      background: linear-gradient(180deg, #0e1a0e 0%, #0a1a12 100%);
+      height: 190px; flex-shrink: 0;
+      background: linear-gradient(180deg, #0a180e 0%, #081410 100%);
       position: relative; overflow: hidden;
     }
-    .map-grid {
+    .lv-map-grid {
       position: absolute; inset: 0;
       background-image:
         linear-gradient(rgba(34,197,94,.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(34,197,94,.04) 1px, transparent 1px);
       background-size: 28px 28px;
     }
-    .map-road-h {
+    .lv-road-h {
       position: absolute; left: 0; right: 0; height: 12px;
-      background: rgba(255,255,255,.06); border-top: 1px solid rgba(255,255,255,.08); border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.055); border-top: 1px solid rgba(255,255,255,.07); border-bottom: 1px solid rgba(255,255,255,.07);
     }
-    .map-road-v {
+    .lv-road-v {
       position: absolute; top: 0; bottom: 0; width: 12px;
-      background: rgba(255,255,255,.06); border-left: 1px solid rgba(255,255,255,.08); border-right: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.055); border-left: 1px solid rgba(255,255,255,.07); border-right: 1px solid rgba(255,255,255,.07);
     }
-    .map-route {
-      position: absolute;
-      stroke: #E8570A; stroke-width: 3; stroke-dasharray: 8 5;
-      fill: none; animation: dash-flow 1.2s linear infinite;
-    }
-    .map-pin { position: absolute; font-size: 22px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.6)); }
-    .map-rider { position: absolute; font-size: 22px; transition: left .6s, top .6s; }
-    .map-label {
+    .lv-pin   { position: absolute; font-size: 22px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.7)); }
+    .lv-rider { position: absolute; font-size: 22px; transition: left .8s cubic-bezier(.4,0,.2,1), top .8s cubic-bezier(.4,0,.2,1); filter: drop-shadow(0 2px 6px rgba(0,0,0,.5)); }
+    .lv-label {
       position: absolute; bottom: 8px; left: 12px;
-      background: rgba(0,0,0,.7); backdrop-filter: blur(8px);
+      background: rgba(0,0,0,.75); backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,.08); border-radius: 10px;
-      padding: 6px 12px; font-size: 12px; font-weight: 700; color: var(--orange);
+      padding: 5px 12px; font-size: 12px; font-weight: 700; color: var(--orange);
+    }
+    .lv-eta {
+      position: absolute; bottom: 8px; right: 12px;
+      background: rgba(0,0,0,.75); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.08); border-radius: 10px;
+      padding: 5px 12px; font-size: 12px; font-weight: 700; color: #fff;
     }
 
+    /* Contact cards */
+    .contact-card {
+      margin: 12px 20px 0; background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 12px 14px;
+      display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+    }
+    .contact-ava { width: 40px; height: 40px; border-radius: 50%; background: var(--card2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .contact-info { flex: 1; }
+    .contact-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .contact-name  { font-size: 14px; font-weight: 700; color: var(--text); margin-top: 1px; }
+    .contact-sub   { font-size: 11px; color: var(--muted2); margin-top: 1px; }
+    .contact-call  { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 17px; cursor: pointer; flex-shrink: 0; border: none; }
+    .call-green { background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3) !important; }
+    .call-orange{ background: rgba(232,87,10,.12); border: 1px solid rgba(232,87,10,.3) !important; }
+
     /* Steps */
-    .steps-wrap { padding: 20px 20px 0; flex: 1; }
-    .step-row { display: flex; gap: 14px; padding-bottom: 20px; position: relative; }
+    .steps-wrap { padding: 14px 20px 0; flex: 1; overflow-y: auto; }
+    .steps-wrap::-webkit-scrollbar { display: none; }
+    .step-row { display: flex; gap: 14px; padding-bottom: 16px; position: relative; }
     .step-row:not(:last-child)::after {
       content: ''; position: absolute; left: 19px; top: 40px; bottom: 0;
       width: 2px; background: var(--border);
@@ -58,32 +75,31 @@
     .step-ico {
       width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center; font-size: 18px;
-      background: var(--card2); border: 2px solid var(--border);
+      background: var(--card2); border: 2px solid var(--border); transition: all .3s;
     }
     .step-row.done .step-ico  { background: rgba(34,197,94,.15); border-color: #22c55e; }
     .step-row.now  .step-ico  { background: rgba(232,87,10,.15); border-color: var(--orange); box-shadow: 0 0 12px rgba(232,87,10,.3); }
     .step-body { flex: 1; padding-top: 8px; }
-    .step-title { font-size: 15px; font-weight: 700; color: var(--text); }
+    .step-title { font-size: 14px; font-weight: 700; color: var(--text); }
     .step-row.pending .step-title { color: var(--muted); }
-    .step-sub { font-size: 12px; color: var(--muted2); margin-top: 3px; }
-    .step-tag { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .step-sub { font-size: 12px; color: var(--muted2); margin-top: 2px; }
+    .step-tag { display: inline-block; margin-top: 5px; font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 20px; }
     .step-tag-done    { background: rgba(34,197,94,.12); color: #22c55e; }
     .step-tag-now     { background: rgba(232,87,10,.12); color: var(--orange); }
     .step-tag-pending { background: var(--card2); color: var(--muted); }
 
-    /* CTA */
-    .cta-wrap { padding: 16px 20px 24px; flex-shrink: 0; }
-    .btn-step { width: 100%; padding: 17px; background: linear-gradient(135deg, #c94a00, var(--orange)); border: none; border-radius: var(--r); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 28px var(--orange-glow); }
-    .btn-step:active { transform: scale(.97); }
-    .btn-step:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+    /* Code badge */
+    .code-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(232,87,10,.1); border: 1px solid rgba(232,87,10,.25);
+      border-radius: 8px; padding: 4px 10px; margin-top: 6px;
+      font-size: 13px; font-weight: 800; color: var(--orange); letter-spacing: .08em;
+    }
 
-    /* Client card */
-    .client-card { margin: 0 20px 16px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
-    .client-ava  { width: 44px; height: 44px; border-radius: 50%; background: var(--card2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-    .client-info { flex: 1; }
-    .client-name { font-size: 14px; font-weight: 700; color: var(--text); }
-    .client-addr { font-size: 12px; color: var(--muted2); margin-top: 2px; }
-    .client-call { width: 38px; height: 38px; background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; }
+    /* CTA */
+    .cta-wrap { padding: 12px 20px 20px; flex-shrink: 0; }
+    .btn-step { width: 100%; padding: 16px; background: linear-gradient(135deg, #c94a00, var(--orange)); border: none; border-radius: var(--r); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 28px var(--orange-glow); transition: transform .1s; }
+    .btn-step:active { transform: scale(.97); }
   </style>
 </head>
 <body>
@@ -96,32 +112,38 @@
 
     <!-- Fake map -->
     <div class="map-zone">
-      <div class="map-grid"></div>
-      <div class="map-road-h" style="top:90px"></div>
-      <div class="map-road-h" style="top:150px"></div>
-      <div class="map-road-v" style="left:120px"></div>
-      <div class="map-road-v" style="left:260px"></div>
-      <svg class="map-route" style="position:absolute;inset:0;width:100%;height:100%">
-        <polyline points="80,90 130,90 130,150 280,150" class="map-route"/>
+      <div class="lv-map-grid"></div>
+      <div class="lv-road-h" style="top:88px"></div>
+      <div class="lv-road-h" style="top:148px"></div>
+      <div class="lv-road-v" style="left:118px"></div>
+      <div class="lv-road-v" style="left:258px"></div>
+      <!-- Route SVG — class only on the path, not the SVG container -->
+      <svg style="position:absolute;inset:0;width:100%;height:100%;overflow:visible" aria-hidden="true">
+        <polyline points="80,88 128,88 128,148 278,148"
+          fill="none" stroke="#E8570A" stroke-width="3"
+          stroke-dasharray="8 5"
+          style="animation: dash-flow 1.2s linear infinite"/>
       </svg>
-      <div class="map-pin" style="left:64px;top:74px">🍗</div>
-      <div class="map-pin" style="left:266px;top:134px">📍</div>
-      <div class="map-rider" id="mapRider" style="left:82px;top:72px">🏍️</div>
-      <div class="map-label" id="mapLabel">En route vers le restaurant</div>
+      <div class="lv-pin" style="left:62px;top:72px">🍗</div>
+      <div class="lv-pin" style="left:264px;top:132px">📍</div>
+      <div class="lv-rider" id="mapRider" style="left:80px;top:70px">🏍️</div>
+      <div class="lv-label" id="mapLabel">En route → restaurant</div>
+      <div class="lv-eta" id="mapEta">~8 min</div>
     </div>
 
-    <!-- Client info -->
-    <div class="client-card">
-      <div class="client-ava">🧑🏿</div>
-      <div class="client-info">
-        <div class="client-name">Kouamé Brice</div>
-        <div class="client-addr">📍 Bonamoussadi, face lycée</div>
+    <!-- Contact card (restaurant or client depending on step) -->
+    <div class="contact-card" id="contactCard">
+      <div class="contact-ava">🍗</div>
+      <div class="contact-info">
+        <div class="contact-label">Restaurant</div>
+        <div class="contact-name">Chez Mama Benz</div>
+        <div class="contact-sub">Bonamoussadi · 1.2 km</div>
       </div>
-      <div class="client-call" onclick="showToast('Appel client…')">📞</div>
+      <button class="contact-call call-orange" onclick="showToast('Appel restaurant…')">📞</button>
     </div>
 
     <!-- Steps -->
-    <div class="steps-wrap" id="stepsWrap">
+    <div class="steps-wrap">
       <div class="step-row done" id="step0">
         <div class="step-ico">✅</div>
         <div class="step-body">
@@ -142,7 +164,8 @@
         <div class="step-ico">📦</div>
         <div class="step-body">
           <div class="step-title">Récupérer la commande</div>
-          <div class="step-sub">Montre le code #4872 au resto</div>
+          <div class="step-sub">Montre le code au restaurant</div>
+          <div class="code-badge" id="codeEl" style="display:none">🔑 #4872</div>
           <span class="step-tag step-tag-pending">En attente</span>
         </div>
       </div>
@@ -166,13 +189,6 @@
 <script>
   let currentStep = 1;
 
-  const steps = [
-    { title: 'Commande acceptée',  sub: 'Il y a 2 min',                     tag: 'Fait',        ico: '✅' },
-    { title: 'Aller au restaurant',sub: 'Chez Mama Benz · 1.2 km',          tag: 'En cours',    ico: '🍗' },
-    { title: 'Récupérer la commande', sub: 'Montre le code #4872 au resto', tag: 'En attente',  ico: '📦' },
-    { title: 'Livrer au client',   sub: 'Bonamoussadi, face lycée',          tag: 'En attente',  ico: '🏠' },
-  ];
-
   const ctaLabels = [
     '',
     'Je suis au restaurant →',
@@ -181,18 +197,34 @@
   ];
 
   const mapPositions = [
-    { left: '82px',  top: '72px'  },
-    { left: '82px',  top: '72px'  },
-    { left: '118px', top: '138px' },
-    { left: '268px', top: '138px' },
+    { left: '80px',  top: '70px'  },
+    { left: '80px',  top: '70px'  },
+    { left: '116px', top: '136px' },
+    { left: '270px', top: '136px' },
   ];
 
-  const mapLabels = [
-    '',
-    'En route vers le restaurant',
-    'Commande récupérée ✅',
-    'En route vers le client',
+  const mapLabels = ['', 'En route → restaurant', 'Au restaurant ✅', 'En route → client'];
+  const etaLabels = ['', '~8 min', 'Récupération…', '~4 min'];
+
+  const contactData = [
+    null,
+    { ava: '🍗', label: 'Restaurant', name: 'Chez Mama Benz',  sub: 'Bonamoussadi · 1.2 km', callMsg: 'Appel restaurant…', cls: 'call-orange' },
+    { ava: '🍗', label: 'Restaurant', name: 'Chez Mama Benz',  sub: 'Récupération en cours',  callMsg: 'Appel restaurant…', cls: 'call-orange' },
+    { ava: '🧑🏿', label: 'Client',    name: 'Kouamé Brice',    sub: 'Bonamoussadi, face lycée', callMsg: 'Appel client…',     cls: 'call-green'  },
   ];
+
+  function updateContactCard(step) {
+    const d = contactData[step];
+    if (!d) return;
+    const card = document.getElementById('contactCard');
+    card.querySelector('.contact-ava').textContent  = d.ava;
+    card.querySelector('.contact-label').textContent = d.label;
+    card.querySelector('.contact-name').textContent  = d.name;
+    card.querySelector('.contact-sub').textContent   = d.sub;
+    const btn = card.querySelector('.contact-call');
+    btn.className = 'contact-call ' + d.cls;
+    btn.onclick = () => showToast(d.callMsg);
+  }
 
   function nextStep() {
     if (currentStep >= 3) {
@@ -200,7 +232,7 @@
       return;
     }
 
-    // Mark current as done
+    // Mark current done
     const cur = document.getElementById('step' + currentStep);
     cur.className = 'step-row done';
     cur.querySelector('.step-ico').textContent = '✅';
@@ -209,25 +241,36 @@
 
     currentStep++;
 
-    // Mark next as now
+    // Mark next as active
     const nxt = document.getElementById('step' + currentStep);
     if (nxt) {
       nxt.className = 'step-row now';
-      const nxtTag = nxt.querySelector('.step-tag');
-      nxtTag.className = 'step-tag step-tag-now';
-      nxtTag.textContent = 'En cours';
+      const tag = nxt.querySelector('.step-tag');
+      tag.className = 'step-tag step-tag-now';
+      tag.textContent = 'En cours';
     }
 
-    // Move rider on map
+    // Show code badge when at restaurant
+    if (currentStep === 2) {
+      document.getElementById('codeEl').style.display = 'inline-flex';
+    }
+
+    // Move rider
     const pos = mapPositions[currentStep];
     const rider = document.getElementById('mapRider');
     rider.style.left = pos.left;
     rider.style.top  = pos.top;
     document.getElementById('mapLabel').textContent = mapLabels[currentStep];
+    document.getElementById('mapEta').textContent   = etaLabels[currentStep];
+
+    // Update contact card
+    updateContactCard(currentStep);
 
     // Update CTA
     document.getElementById('ctaBtn').textContent = ctaLabels[currentStep];
-    showToast(currentStep === 2 ? 'Au restaurant ✅' : 'Commande récupérée ✅');
+
+    const toasts = ['', '', 'Au restaurant ✅', 'Commande récupérée ✅'];
+    showToast(toasts[currentStep]);
   }
 </script>
 </body>

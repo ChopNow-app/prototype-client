@@ -10,9 +10,10 @@
   <link rel="stylesheet" href="../../css/layout.css"/>
   <link rel="stylesheet" href="../../css/components.css"/>
   <style>
-    .screen { padding: 32px 24px 36px; justify-content: space-between; align-items: center; text-align: center; }
+    .screen { padding: 32px 24px 36px; justify-content: space-between; align-items: center; text-align: center; overflow: hidden; }
 
-    canvas#confetti { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    /* Confetti on top of everything */
+    canvas#confetti { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
 
     .success-wrap { z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
 
@@ -29,7 +30,7 @@
     /* Gain card */
     .gain-card {
       width: 100%; background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 20px; text-align: left;
+      border-radius: var(--r); padding: 18px; text-align: left;
     }
     .gain-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
     .gain-row + .gain-row { border-top: 1px solid var(--border); }
@@ -40,12 +41,13 @@
 
     /* Rating */
     .rating-section { z-index: 1; width: 100%; }
-    .rating-title { font-size: 14px; color: var(--muted2); margin-bottom: 10px; }
+    .rating-title { font-size: 13px; color: var(--muted2); margin-bottom: 10px; }
     .stars { display: flex; justify-content: center; gap: 10px; }
     .star { font-size: 34px; cursor: pointer; filter: grayscale(1) opacity(.4); transition: filter .15s, transform .15s; }
     .star.on { filter: none; transform: scale(1.15); }
+    .star:active { transform: scale(1.3); }
 
-    .bottom-wrap { z-index: 1; width: 100%; display: flex; flex-direction: column; gap: 10px; }
+    .bottom-wrap { z-index: 1; width: 100%; }
   </style>
 </head>
 <body>
@@ -69,7 +71,7 @@
         </div>
         <div class="gain-row">
           <span class="gain-lbl">Bonus rapidité ⚡</span>
-          <span class="gain-val">+50 FCFA</span>
+          <span class="gain-val" style="color:#22c55e">+50 FCFA</span>
         </div>
         <div class="gain-row">
           <span class="gain-total-lbl">Total gagné</span>
@@ -79,7 +81,7 @@
     </div>
 
     <div class="rating-section">
-      <div class="rating-title">Note du client pour toi</div>
+      <div class="rating-title">Le client te note</div>
       <div class="stars" id="stars">
         <span class="star on" onclick="setStar(1)">⭐</span>
         <span class="star on" onclick="setStar(2)">⭐</span>
@@ -110,7 +112,7 @@
     canvas.height = phone.clientHeight;
     const ctx    = canvas.getContext('2d');
     const colors = ['#22c55e','#E8570A','#FFB800','#3b82f6','#fff','#f472b6'];
-    const pieces = Array.from({ length: 70 }, () => ({
+    const pieces = Array.from({ length: 80 }, () => ({
       x: Math.random() * canvas.width, y: -20,
       w: 6 + Math.random() * 8, h: 4 + Math.random() * 6,
       color: colors[Math.floor(Math.random() * colors.length)],
@@ -138,9 +140,7 @@
     })();
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(launchConfetti, 300);
-  });
+  document.addEventListener('DOMContentLoaded', () => setTimeout(launchConfetti, 300));
 </script>
 </body>
 </html>

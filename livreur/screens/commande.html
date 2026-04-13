@@ -12,7 +12,7 @@
   <style>
     .screen { justify-content: space-between; padding: 24px 20px 32px; }
 
-    .alert-header { text-align: center; margin-bottom: 20px; }
+    .alert-header { text-align: center; margin-bottom: 16px; }
     .alert-pulse {
       width: 72px; height: 72px; border-radius: 50%;
       background: rgba(232,87,10,.15); border: 2px solid rgba(232,87,10,.4);
@@ -24,18 +24,20 @@
     .alert-sub   { font-size: 14px; color: var(--muted2); }
 
     /* Countdown */
-    .countdown-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+    .countdown-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
     .countdown-ring { position: relative; width: 80px; height: 80px; }
     .countdown-ring svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
     .countdown-ring circle { fill: none; stroke-width: 5; }
     .countdown-ring .bg  { stroke: var(--border2); }
-    .countdown-ring .fg  { stroke: var(--orange); stroke-linecap: round; transition: stroke-dashoffset .9s linear; }
-    .countdown-num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 900; color: var(--orange); }
+    .countdown-ring .fg  { stroke: var(--orange); stroke-linecap: round; transition: stroke-dashoffset .9s linear, stroke .3s; }
+    .countdown-ring.urgent .fg  { stroke: #ef4444; }
+    .countdown-num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 900; color: var(--orange); transition: color .3s; }
+    .countdown-ring.urgent .countdown-num { color: #ef4444; }
     .countdown-lbl { font-size: 11px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: .06em; }
 
     /* Order card */
-    .order-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 18px; margin-bottom: 16px; }
-    .order-row  { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .order-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; margin-bottom: 16px; }
+    .order-row  { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); }
     .order-row:last-child { border-bottom: none; padding-bottom: 0; }
     .order-lbl  { font-size: 13px; color: var(--muted2); }
     .order-val  { font-size: 14px; font-weight: 700; color: var(--text); text-align: right; max-width: 60%; }
@@ -43,8 +45,8 @@
 
     /* Action buttons */
     .action-row { display: flex; gap: 12px; }
-    .btn-refuse { flex: 1; padding: 16px; background: var(--card2); border: 1px solid var(--border2); border-radius: var(--r); color: var(--muted); font-size: 15px; font-weight: 700; cursor: pointer; }
-    .btn-accept { flex: 2; padding: 16px; background: linear-gradient(135deg, #16a34a, #22c55e); border: none; border-radius: var(--r); color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(34,197,94,.35); }
+    .btn-refuse { flex: 1; padding: 16px; background: var(--card2); border: 1px solid var(--border2); border-radius: var(--r); color: var(--muted); font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s; }
+    .btn-accept { flex: 2; padding: 16px; background: linear-gradient(135deg, #16a34a, #22c55e); border: none; border-radius: var(--r); color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(34,197,94,.35); transition: transform .1s; }
     .btn-accept:active { transform: scale(.97); }
     .btn-refuse:active { background: var(--border); }
   </style>
@@ -65,7 +67,7 @@
       </div>
 
       <div class="countdown-wrap">
-        <div class="countdown-ring">
+        <div class="countdown-ring" id="countRing">
           <svg viewBox="0 0 80 80" width="80" height="80">
             <circle class="bg" cx="40" cy="40" r="36"/>
             <circle class="fg" id="ring" cx="40" cy="40" r="36"
@@ -114,13 +116,20 @@
   let remaining = TOTAL;
   let timer;
 
-  const ring  = document.getElementById('ring');
-  const num   = document.getElementById('countNum');
+  const ring      = document.getElementById('ring');
+  const num       = document.getElementById('countNum');
+  const countRing = document.getElementById('countRing');
 
   function tick() {
     remaining--;
     num.textContent = remaining;
     ring.style.strokeDashoffset = CIRC * (1 - remaining / TOTAL);
+
+    // Turn red when ≤ 10s
+    if (remaining <= 10) {
+      countRing.classList.add('urgent');
+    }
+
     if (remaining <= 0) {
       clearInterval(timer);
       num.textContent = '⏰';
