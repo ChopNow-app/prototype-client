@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow — Profil</title>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+  <link rel="stylesheet" href="../css/layout.css"/>
+  <link rel="stylesheet" href="../css/components.css"/>
+  <style>
+    .screen { padding-bottom: 84px; }
+
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 20px 24px;
+      flex-shrink: 0;
+    }
+    .avatar {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #2a1000, #3a1800);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px;
+      border: 3px solid rgba(232,87,10,.4);
+      margin-bottom: 14px;
+      box-shadow: 0 8px 24px rgba(232,87,10,.2);
+    }
+    .profile-name  { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .profile-phone { font-size: 14px; color: var(--muted2); }
+
+    .stats-row {
+      display: flex;
+      gap: 12px;
+      padding: 0 20px 20px;
+      flex-shrink: 0;
+    }
+    .stat-card {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px;
+      text-align: center;
+    }
+    .stat-val { font-size: 22px; font-weight: 900; color: var(--orange); }
+    .stat-lbl { font-size: 11px; color: var(--muted2); margin-top: 3px; }
+
+    .menu-group { padding: 0 20px 8px; flex-shrink: 0; }
+    .menu-group-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; padding: 16px 0 8px; }
+
+    .menu-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: background .15s;
+    }
+    .menu-row:active { background: var(--card2); }
+    .menu-row-ico { font-size: 22px; width: 36px; text-align: center; flex-shrink: 0; }
+    .menu-row-body { flex: 1; }
+    .menu-row-title { font-size: 15px; font-weight: 600; color: var(--text); }
+    .menu-row-sub   { font-size: 12px; color: var(--muted2); margin-top: 2px; }
+    .menu-row-arrow { font-size: 16px; color: var(--muted); }
+
+    .logout-btn {
+      margin: 8px 20px 0;
+      padding: 15px;
+      background: #1a0a0a;
+      border: 1px solid rgba(244,67,54,.2);
+      border-radius: var(--r);
+      color: #f44336;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      width: calc(100% - 40px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+
+    <div class="profile-header">
+      <div class="avatar">🧑🏿</div>
+      <div class="profile-name">Kouamé Brice</div>
+      <div class="profile-phone">+237 677 XXX XXX</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">12</div>
+        <div class="stat-lbl">Commandes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">3</div>
+        <div class="stat-lbl">En cours</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">4.8⭐</div>
+        <div class="stat-lbl">Ma note</div>
+      </div>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-group-title">Mon compte</div>
+
+      <div class="menu-row" onclick="showToast('Mes informations')">
+        <span class="menu-row-ico">👤</span>
+        <div class="menu-row-body">
+          <div class="menu-row-title">Informations personnelles</div>
+          <div class="menu-row-sub">Nom, téléphone, email</div>
+        </div>
+        <span class="menu-row-arrow">›</span>
+      </div>
+
+      <div class="menu-row" onclick="showToast('Mes adresses')">
+        <span class="menu-row-ico">📍</span>
+        <div class="menu-row-body">
+          <div class="menu-row-title">Mes adresses</div>
+          <div class="menu-row-sub">Bonamoussadi, face au lycée</div>
+        </div>
+        <span class="menu-row-arrow">›</span>
+      </div>
+
+      <div class="menu-row" onclick="showToast('Mes paiements')">
+        <span class="menu-row-ico">📱</span>
+        <div class="menu-row-body">
+          <div class="menu-row-title">Paiement</div>
+          <div class="menu-row-sub">MTN MoMo · +237 677 XXX XXX</div>
+        </div>
+        <span class="menu-row-arrow">›</span>
+      </div>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-group-title">Historique</div>
+
+      <div class="menu-row" onclick="navigate('tracking')">
+        <span class="menu-row-ico">📦</span>
+        <div class="menu-row-body">
+          <div class="menu-row-title">Mes commandes</div>
+          <div class="menu-row-sub">12 commandes passées</div>
+        </div>
+        <span class="menu-row-arrow">›</span>
+      </div>
+
+      <div class="menu-row" onclick="showToast('Mes favoris')">
+        <span class="menu-row-ico">❤️</span>
+        <div class="menu-row-body">
+          <div class="menu-row-title">Restaurants favoris</div>
+          <div class="menu-row-sub">Chez Mama Benz, Grillades Makepe</div>
+        </div>
+        <span class="menu-row-arrow">›</span>
+      </div>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-group-title">Support</div>
+
+      <div class="menu-row" onclick="showToast('Aide et support')">
+        <span class="menu-row-ico">💬</span>
+        <div class="menu-row-body">
+          <div class="menu-row-title">Aide & Support</div>
+          <div class="menu-row-sub">WhatsApp, FAQ</div>
+        </div>
+        <span class="menu-row-arrow">›</span>
+      </div>
+
+      <div class="menu-row" onclick="showToast('À propos de ChopNow')">
+        <span class="menu-row-ico">ℹ️</span>
+        <div class="menu-row-body">
+          <div class="menu-row-title">À propos</div>
+          <div class="menu-row-sub">ChopNowCM v1.0 · Douala 🇨🇲</div>
+        </div>
+        <span class="menu-row-arrow">›</span>
+      </div>
+    </div>
+
+    <button class="logout-btn" onclick="navigate('phone')">🚪 Se déconnecter</button>
+
+    <nav class="bnav">
+      <div class="bni" onclick="navigate('home', true)"><span class="bni-ico">🏠</span><span class="bni-lbl">Accueil</span></div>
+      <div class="bni" onclick="navigate('cart')"><span class="bni-ico">🛒</span><span class="bni-lbl">Panier</span></div>
+      <div class="bni" onclick="navigate('tracking')"><span class="bni-ico">📦</span><span class="bni-lbl">Commandes</span></div>
+      <div class="bni on"><span class="bni-ico">👤</span><span class="bni-lbl">Profil</span></div>
+    </nav>
+  </div>
+</div>
+<script src="../js/app.js"></script>
+</body>
+</html>
