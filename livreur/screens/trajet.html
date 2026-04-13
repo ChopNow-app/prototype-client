@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow Livreur — Trajet</title>
+  <link rel="stylesheet" href="../../css/base.css"/>
+  <link rel="stylesheet" href="../../css/animations.css"/>
+  <link rel="stylesheet" href="../../css/layout.css"/>
+  <link rel="stylesheet" href="../../css/components.css"/>
+  <style>
+    .screen { padding-bottom: 0; }
+
+    /* Map zone */
+    .map-zone {
+      height: 200px; flex-shrink: 0;
+      background: linear-gradient(180deg, #0e1a0e 0%, #0a1a12 100%);
+      position: relative; overflow: hidden;
+    }
+    .map-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(34,197,94,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,197,94,.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .map-road-h {
+      position: absolute; left: 0; right: 0; height: 12px;
+      background: rgba(255,255,255,.06); border-top: 1px solid rgba(255,255,255,.08); border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .map-road-v {
+      position: absolute; top: 0; bottom: 0; width: 12px;
+      background: rgba(255,255,255,.06); border-left: 1px solid rgba(255,255,255,.08); border-right: 1px solid rgba(255,255,255,.08);
+    }
+    .map-route {
+      position: absolute;
+      stroke: #E8570A; stroke-width: 3; stroke-dasharray: 8 5;
+      fill: none; animation: dash-flow 1.2s linear infinite;
+    }
+    .map-pin { position: absolute; font-size: 22px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.6)); }
+    .map-rider { position: absolute; font-size: 22px; transition: left .6s, top .6s; }
+    .map-label {
+      position: absolute; bottom: 8px; left: 12px;
+      background: rgba(0,0,0,.7); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.08); border-radius: 10px;
+      padding: 6px 12px; font-size: 12px; font-weight: 700; color: var(--orange);
+    }
+
+    /* Steps */
+    .steps-wrap { padding: 20px 20px 0; flex: 1; }
+    .step-row { display: flex; gap: 14px; padding-bottom: 20px; position: relative; }
+    .step-row:not(:last-child)::after {
+      content: ''; position: absolute; left: 19px; top: 40px; bottom: 0;
+      width: 2px; background: var(--border);
+    }
+    .step-row.done::after { background: #22c55e; }
+    .step-ico {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+      background: var(--card2); border: 2px solid var(--border);
+    }
+    .step-row.done .step-ico  { background: rgba(34,197,94,.15); border-color: #22c55e; }
+    .step-row.now  .step-ico  { background: rgba(232,87,10,.15); border-color: var(--orange); box-shadow: 0 0 12px rgba(232,87,10,.3); }
+    .step-body { flex: 1; padding-top: 8px; }
+    .step-title { font-size: 15px; font-weight: 700; color: var(--text); }
+    .step-row.pending .step-title { color: var(--muted); }
+    .step-sub { font-size: 12px; color: var(--muted2); margin-top: 3px; }
+    .step-tag { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .step-tag-done    { background: rgba(34,197,94,.12); color: #22c55e; }
+    .step-tag-now     { background: rgba(232,87,10,.12); color: var(--orange); }
+    .step-tag-pending { background: var(--card2); color: var(--muted); }
+
+    /* CTA */
+    .cta-wrap { padding: 16px 20px 24px; flex-shrink: 0; }
+    .btn-step { width: 100%; padding: 17px; background: linear-gradient(135deg, #c94a00, var(--orange)); border: none; border-radius: var(--r); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 28px var(--orange-glow); }
+    .btn-step:active { transform: scale(.97); }
+    .btn-step:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+    /* Client card */
+    .client-card { margin: 0 20px 16px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    .client-ava  { width: 44px; height: 44px; border-radius: 50%; background: var(--card2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .client-info { flex: 1; }
+    .client-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .client-addr { font-size: 12px; color: var(--muted2); margin-top: 2px; }
+    .client-call { width: 38px; height: 38px; background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+
+    <!-- Fake map -->
+    <div class="map-zone">
+      <div class="map-grid"></div>
+      <div class="map-road-h" style="top:90px"></div>
+      <div class="map-road-h" style="top:150px"></div>
+      <div class="map-road-v" style="left:120px"></div>
+      <div class="map-road-v" style="left:260px"></div>
+      <svg class="map-route" style="position:absolute;inset:0;width:100%;height:100%">
+        <polyline points="80,90 130,90 130,150 280,150" class="map-route"/>
+      </svg>
+      <div class="map-pin" style="left:64px;top:74px">🍗</div>
+      <div class="map-pin" style="left:266px;top:134px">📍</div>
+      <div class="map-rider" id="mapRider" style="left:82px;top:72px">🏍️</div>
+      <div class="map-label" id="mapLabel">En route vers le restaurant</div>
+    </div>
+
+    <!-- Client info -->
+    <div class="client-card">
+      <div class="client-ava">🧑🏿</div>
+      <div class="client-info">
+        <div class="client-name">Kouamé Brice</div>
+        <div class="client-addr">📍 Bonamoussadi, face lycée</div>
+      </div>
+      <div class="client-call" onclick="showToast('Appel client…')">📞</div>
+    </div>
+
+    <!-- Steps -->
+    <div class="steps-wrap" id="stepsWrap">
+      <div class="step-row done" id="step0">
+        <div class="step-ico">✅</div>
+        <div class="step-body">
+          <div class="step-title">Commande acceptée</div>
+          <div class="step-sub">Il y a 2 min</div>
+          <span class="step-tag step-tag-done">Fait</span>
+        </div>
+      </div>
+      <div class="step-row now" id="step1">
+        <div class="step-ico">🍗</div>
+        <div class="step-body">
+          <div class="step-title">Aller au restaurant</div>
+          <div class="step-sub">Chez Mama Benz · 1.2 km</div>
+          <span class="step-tag step-tag-now">En cours</span>
+        </div>
+      </div>
+      <div class="step-row pending" id="step2">
+        <div class="step-ico">📦</div>
+        <div class="step-body">
+          <div class="step-title">Récupérer la commande</div>
+          <div class="step-sub">Montre le code #4872 au resto</div>
+          <span class="step-tag step-tag-pending">En attente</span>
+        </div>
+      </div>
+      <div class="step-row pending" id="step3">
+        <div class="step-ico">🏠</div>
+        <div class="step-body">
+          <div class="step-title">Livrer au client</div>
+          <div class="step-sub">Bonamoussadi, face lycée</div>
+          <span class="step-tag step-tag-pending">En attente</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-wrap">
+      <button class="btn-step" id="ctaBtn" onclick="nextStep()">Je suis au restaurant →</button>
+    </div>
+
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script>
+  let currentStep = 1;
+
+  const steps = [
+    { title: 'Commande acceptée',  sub: 'Il y a 2 min',                     tag: 'Fait',        ico: '✅' },
+    { title: 'Aller au restaurant',sub: 'Chez Mama Benz · 1.2 km',          tag: 'En cours',    ico: '🍗' },
+    { title: 'Récupérer la commande', sub: 'Montre le code #4872 au resto', tag: 'En attente',  ico: '📦' },
+    { title: 'Livrer au client',   sub: 'Bonamoussadi, face lycée',          tag: 'En attente',  ico: '🏠' },
+  ];
+
+  const ctaLabels = [
+    '',
+    'Je suis au restaurant →',
+    'Commande récupérée →',
+    'J\'ai livré ! 🎉',
+  ];
+
+  const mapPositions = [
+    { left: '82px',  top: '72px'  },
+    { left: '82px',  top: '72px'  },
+    { left: '118px', top: '138px' },
+    { left: '268px', top: '138px' },
+  ];
+
+  const mapLabels = [
+    '',
+    'En route vers le restaurant',
+    'Commande récupérée ✅',
+    'En route vers le client',
+  ];
+
+  function nextStep() {
+    if (currentStep >= 3) {
+      navigate('livre');
+      return;
+    }
+
+    // Mark current as done
+    const cur = document.getElementById('step' + currentStep);
+    cur.className = 'step-row done';
+    cur.querySelector('.step-ico').textContent = '✅';
+    cur.querySelector('.step-tag').className = 'step-tag step-tag-done';
+    cur.querySelector('.step-tag').textContent = 'Fait';
+
+    currentStep++;
+
+    // Mark next as now
+    const nxt = document.getElementById('step' + currentStep);
+    if (nxt) {
+      nxt.className = 'step-row now';
+      const nxtTag = nxt.querySelector('.step-tag');
+      nxtTag.className = 'step-tag step-tag-now';
+      nxtTag.textContent = 'En cours';
+    }
+
+    // Move rider on map
+    const pos = mapPositions[currentStep];
+    const rider = document.getElementById('mapRider');
+    rider.style.left = pos.left;
+    rider.style.top  = pos.top;
+    document.getElementById('mapLabel').textContent = mapLabels[currentStep];
+
+    // Update CTA
+    document.getElementById('ctaBtn').textContent = ctaLabels[currentStep];
+    showToast(currentStep === 2 ? 'Au restaurant ✅' : 'Commande récupérée ✅');
+  }
+</script>
+</body>
+</html>

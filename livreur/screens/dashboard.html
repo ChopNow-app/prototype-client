@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow Livreur — Dashboard</title>
+  <link rel="stylesheet" href="../../css/base.css"/>
+  <link rel="stylesheet" href="../../css/animations.css"/>
+  <link rel="stylesheet" href="../../css/layout.css"/>
+  <link rel="stylesheet" href="../../css/components.css"/>
+  <style>
+    .screen { padding-bottom: 0; }
+
+    /* Header */
+    .dash-header { padding: 20px 20px 16px; flex-shrink: 0; }
+    .dash-top    { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .dash-greeting { font-size: 22px; font-weight: 800; }
+    .dash-greeting span { color: var(--orange); }
+    .dash-sub { font-size: 13px; color: var(--muted2); margin-top: 2px; }
+
+    /* Toggle online */
+    .toggle-wrap {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 50px; padding: 8px 14px;
+      cursor: pointer; transition: all .2s;
+    }
+    .toggle-wrap.online { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.3); }
+    .toggle-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); transition: background .2s; }
+    .toggle-wrap.online .toggle-dot { background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,.6); }
+    .toggle-lbl { font-size: 13px; font-weight: 700; color: var(--muted); transition: color .2s; }
+    .toggle-wrap.online .toggle-lbl { color: #22c55e; }
+
+    /* Stats */
+    .stats-row { display: flex; gap: 10px; padding: 0 20px 20px; flex-shrink: 0; }
+    .stat-card { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 12px; text-align: center; }
+    .stat-val { font-size: 20px; font-weight: 900; color: var(--orange); }
+    .stat-lbl { font-size: 10px; color: var(--muted2); margin-top: 3px; }
+
+    /* Section */
+    .sec { padding: 0 20px 10px; flex-shrink: 0; }
+    .sec-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+
+    /* Commande card */
+    .cmd-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 16px; margin-bottom: 10px;
+      cursor: pointer; transition: border-color .15s;
+    }
+    .cmd-card:active { border-color: var(--orange); }
+    .cmd-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .cmd-resto { font-size: 15px; font-weight: 700; color: var(--text); }
+    .cmd-gain  { font-size: 16px; font-weight: 900; color: #22c55e; }
+    .cmd-meta  { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cmd-chip  { font-size: 11px; background: var(--card2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 10px; color: var(--muted2); }
+    .cmd-chip-hot { border-color: rgba(232,87,10,.3); color: var(--orange); background: rgba(232,87,10,.08); }
+    .new-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(232,87,10,.15); border: 1px solid rgba(232,87,10,.3); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: var(--orange); margin-bottom: 8px; }
+    .new-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); animation: dot-pulse 1s ease infinite; }
+
+    /* Offline overlay */
+    .offline-msg {
+      margin: 0 20px; padding: 20px; background: var(--card2);
+      border: 1px solid var(--border2); border-radius: var(--r);
+      text-align: center; display: none;
+    }
+    .offline-msg-ico { font-size: 40px; margin-bottom: 10px; }
+    .offline-msg-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .offline-msg-sub { font-size: 13px; color: var(--muted2); line-height: 1.5; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+
+    <div class="dash-header">
+      <div class="dash-top">
+        <div>
+          <div class="dash-greeting">Bonjour, <span>Moise</span> 👋</div>
+          <div class="dash-sub">Lundi 13 Avril · Douala</div>
+        </div>
+        <div class="toggle-wrap online" id="toggleWrap" onclick="toggleOnline()">
+          <div class="toggle-dot" id="toggleDot"></div>
+          <span class="toggle-lbl" id="toggleLbl">En ligne</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">7</div>
+        <div class="stat-lbl">Courses</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">3 850</div>
+        <div class="stat-lbl">FCFA gagné</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">18 km</div>
+        <div class="stat-lbl">Parcourus</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Commandes disponibles</div>
+
+      <div id="commandesWrap">
+        <div class="new-badge"><div class="new-dot"></div> Nouvelle</div>
+        <div class="cmd-card" onclick="navigate('commande')">
+          <div class="cmd-card-top">
+            <div class="cmd-resto">Chez Mama Benz</div>
+            <div class="cmd-gain">+550 FCFA</div>
+          </div>
+          <div class="cmd-meta">
+            <span class="cmd-chip cmd-chip-hot">⏱ 20 min</span>
+            <span class="cmd-chip">📍 1.2 km</span>
+            <span class="cmd-chip">🥘 2 articles</span>
+          </div>
+        </div>
+
+        <div class="cmd-card" onclick="navigate('commande')">
+          <div class="cmd-card-top">
+            <div class="cmd-resto">Grillades de Makepe</div>
+            <div class="cmd-gain">+800 FCFA</div>
+          </div>
+          <div class="cmd-meta">
+            <span class="cmd-chip">⏱ 35 min</span>
+            <span class="cmd-chip">📍 3.5 km</span>
+            <span class="cmd-chip">🍗 3 articles</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="offline-msg" id="offlineMsg">
+        <div class="offline-msg-ico">😴</div>
+        <div class="offline-msg-title">Tu es hors ligne</div>
+        <div class="offline-msg-sub">Active "En ligne" pour recevoir des commandes.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script>
+  let isOnline = true;
+
+  function toggleOnline() {
+    isOnline = !isOnline;
+    const wrap = document.getElementById('toggleWrap');
+    const lbl  = document.getElementById('toggleLbl');
+    const cmds = document.getElementById('commandesWrap');
+    const off  = document.getElementById('offlineMsg');
+    if (isOnline) {
+      wrap.classList.add('online');
+      lbl.textContent = 'En ligne';
+      cmds.style.display = '';
+      off.style.display  = 'none';
+      showToast('Tu es en ligne ✅');
+    } else {
+      wrap.classList.remove('online');
+      lbl.textContent = 'Hors ligne';
+      cmds.style.display = 'none';
+      off.style.display  = '';
+      showToast('Tu es hors ligne 😴');
+    }
+  }
+</script>
+</body>
+</html>

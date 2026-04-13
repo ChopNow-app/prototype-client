@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow Livreur — Livré !</title>
+  <link rel="stylesheet" href="../../css/base.css"/>
+  <link rel="stylesheet" href="../../css/animations.css"/>
+  <link rel="stylesheet" href="../../css/layout.css"/>
+  <link rel="stylesheet" href="../../css/components.css"/>
+  <style>
+    .screen { padding: 32px 24px 36px; justify-content: space-between; align-items: center; text-align: center; }
+
+    canvas#confetti { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+
+    .success-wrap { z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+
+    .success-ico {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: rgba(34,197,94,.12); border: 3px solid rgba(34,197,94,.4);
+      display: flex; align-items: center; justify-content: center; font-size: 44px;
+      animation: scale-in .6s cubic-bezier(.34,1.56,.64,1) both;
+      box-shadow: 0 0 40px rgba(34,197,94,.2);
+    }
+    .success-title { font-size: 26px; font-weight: 900; color: var(--text); }
+    .success-sub   { font-size: 14px; color: var(--muted2); }
+
+    /* Gain card */
+    .gain-card {
+      width: 100%; background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 20px; text-align: left;
+    }
+    .gain-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .gain-row + .gain-row { border-top: 1px solid var(--border); }
+    .gain-lbl { font-size: 13px; color: var(--muted2); }
+    .gain-val { font-size: 14px; font-weight: 700; color: var(--text); }
+    .gain-total-lbl { font-size: 14px; font-weight: 700; color: var(--text); }
+    .gain-total-val { font-size: 22px; font-weight: 900; color: #22c55e; }
+
+    /* Rating */
+    .rating-section { z-index: 1; width: 100%; }
+    .rating-title { font-size: 14px; color: var(--muted2); margin-bottom: 10px; }
+    .stars { display: flex; justify-content: center; gap: 10px; }
+    .star { font-size: 34px; cursor: pointer; filter: grayscale(1) opacity(.4); transition: filter .15s, transform .15s; }
+    .star.on { filter: none; transform: scale(1.15); }
+
+    .bottom-wrap { z-index: 1; width: 100%; display: flex; flex-direction: column; gap: 10px; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+    <canvas id="confetti"></canvas>
+
+    <div class="success-wrap">
+      <div class="success-ico">✅</div>
+      <div class="success-title">Livraison réussie !</div>
+      <div class="success-sub">Commande #4872 · Kouamé Brice</div>
+
+      <div class="gain-card">
+        <div class="gain-row">
+          <span class="gain-lbl">Course de base</span>
+          <span class="gain-val">500 FCFA</span>
+        </div>
+        <div class="gain-row">
+          <span class="gain-lbl">Bonus rapidité ⚡</span>
+          <span class="gain-val">+50 FCFA</span>
+        </div>
+        <div class="gain-row">
+          <span class="gain-total-lbl">Total gagné</span>
+          <span class="gain-total-val">550 FCFA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rating-section">
+      <div class="rating-title">Note du client pour toi</div>
+      <div class="stars" id="stars">
+        <span class="star on" onclick="setStar(1)">⭐</span>
+        <span class="star on" onclick="setStar(2)">⭐</span>
+        <span class="star on" onclick="setStar(3)">⭐</span>
+        <span class="star on" onclick="setStar(4)">⭐</span>
+        <span class="star on" onclick="setStar(5)">⭐</span>
+      </div>
+    </div>
+
+    <div class="bottom-wrap">
+      <button class="btn btn-primary" onclick="navigate('dashboard', true)">Retour au dashboard →</button>
+    </div>
+
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script>
+  function setStar(n) {
+    document.querySelectorAll('.star').forEach((s, i) => {
+      s.classList.toggle('on', i < n);
+    });
+  }
+
+  function launchConfetti() {
+    const canvas = document.getElementById('confetti');
+    const phone  = document.querySelector('.phone');
+    canvas.width  = phone.clientWidth;
+    canvas.height = phone.clientHeight;
+    const ctx    = canvas.getContext('2d');
+    const colors = ['#22c55e','#E8570A','#FFB800','#3b82f6','#fff','#f472b6'];
+    const pieces = Array.from({ length: 70 }, () => ({
+      x: Math.random() * canvas.width, y: -20,
+      w: 6 + Math.random() * 8, h: 4 + Math.random() * 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      r: Math.random() * Math.PI * 2,
+      vx: (Math.random() - .5) * 4,
+      vy: 2 + Math.random() * 4,
+      vr: (Math.random() - .5) * .2,
+    }));
+    (function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let alive = false;
+      pieces.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.r += p.vr; p.vy += .08;
+        if (p.y < canvas.height + 20) {
+          alive = true;
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, 1 - p.y / canvas.height);
+          ctx.translate(p.x, p.y); ctx.rotate(p.r);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.restore();
+        }
+      });
+      if (alive) requestAnimationFrame(draw);
+    })();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(launchConfetti, 300);
+  });
+</script>
+</body>
+</html>

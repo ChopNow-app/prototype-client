@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow Livreur — Nouvelle commande</title>
+  <link rel="stylesheet" href="../../css/base.css"/>
+  <link rel="stylesheet" href="../../css/animations.css"/>
+  <link rel="stylesheet" href="../../css/layout.css"/>
+  <link rel="stylesheet" href="../../css/components.css"/>
+  <style>
+    .screen { justify-content: space-between; padding: 24px 20px 32px; }
+
+    .alert-header { text-align: center; margin-bottom: 20px; }
+    .alert-pulse {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(232,87,10,.15); border: 2px solid rgba(232,87,10,.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 34px; margin: 0 auto 14px;
+      animation: pulse-ring 1.5s ease infinite;
+    }
+    .alert-title { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+    .alert-sub   { font-size: 14px; color: var(--muted2); }
+
+    /* Countdown */
+    .countdown-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+    .countdown-ring { position: relative; width: 80px; height: 80px; }
+    .countdown-ring svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
+    .countdown-ring circle { fill: none; stroke-width: 5; }
+    .countdown-ring .bg  { stroke: var(--border2); }
+    .countdown-ring .fg  { stroke: var(--orange); stroke-linecap: round; transition: stroke-dashoffset .9s linear; }
+    .countdown-num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 900; color: var(--orange); }
+    .countdown-lbl { font-size: 11px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: .06em; }
+
+    /* Order card */
+    .order-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 18px; margin-bottom: 16px; }
+    .order-row  { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .order-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .order-lbl  { font-size: 13px; color: var(--muted2); }
+    .order-val  { font-size: 14px; font-weight: 700; color: var(--text); text-align: right; max-width: 60%; }
+    .order-gain { color: #22c55e; font-size: 18px; font-weight: 900; }
+
+    /* Action buttons */
+    .action-row { display: flex; gap: 12px; }
+    .btn-refuse { flex: 1; padding: 16px; background: var(--card2); border: 1px solid var(--border2); border-radius: var(--r); color: var(--muted); font-size: 15px; font-weight: 700; cursor: pointer; }
+    .btn-accept { flex: 2; padding: 16px; background: linear-gradient(135deg, #16a34a, #22c55e); border: none; border-radius: var(--r); color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(34,197,94,.35); }
+    .btn-accept:active { transform: scale(.97); }
+    .btn-refuse:active { background: var(--border); }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+
+    <div>
+      <div class="alert-header">
+        <div class="alert-pulse">🔔</div>
+        <div class="alert-title">Nouvelle commande !</div>
+        <div class="alert-sub">Réponds vite — un autre livreur peut accepter</div>
+      </div>
+
+      <div class="countdown-wrap">
+        <div class="countdown-ring">
+          <svg viewBox="0 0 80 80" width="80" height="80">
+            <circle class="bg" cx="40" cy="40" r="36"/>
+            <circle class="fg" id="ring" cx="40" cy="40" r="36"
+              stroke-dasharray="226" stroke-dashoffset="0"/>
+          </svg>
+          <div class="countdown-num" id="countNum">30</div>
+        </div>
+        <div class="countdown-lbl">secondes pour accepter</div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-row">
+          <span class="order-lbl">Restaurant</span>
+          <span class="order-val">🍗 Chez Mama Benz</span>
+        </div>
+        <div class="order-row">
+          <span class="order-lbl">Client</span>
+          <span class="order-val">📍 Bonamoussadi, face lycée</span>
+        </div>
+        <div class="order-row">
+          <span class="order-lbl">Distance</span>
+          <span class="order-val">1.2 km · ~8 min</span>
+        </div>
+        <div class="order-row">
+          <span class="order-lbl">Articles</span>
+          <span class="order-val">Ndolé + Jus bissap</span>
+        </div>
+        <div class="order-row">
+          <span class="order-lbl">Ton gain</span>
+          <span class="order-val order-gain">+550 FCFA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-refuse" onclick="refuse()">✕ Refuser</button>
+      <button class="btn-accept" onclick="accept()">✓ Accepter</button>
+    </div>
+
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script>
+  const TOTAL = 30;
+  const CIRC  = 226;
+  let remaining = TOTAL;
+  let timer;
+
+  const ring  = document.getElementById('ring');
+  const num   = document.getElementById('countNum');
+
+  function tick() {
+    remaining--;
+    num.textContent = remaining;
+    ring.style.strokeDashoffset = CIRC * (1 - remaining / TOTAL);
+    if (remaining <= 0) {
+      clearInterval(timer);
+      num.textContent = '⏰';
+      showToast('Temps écoulé — commande annulée');
+      setTimeout(() => navigate('dashboard', true), 1500);
+    }
+  }
+
+  timer = setInterval(tick, 1000);
+
+  function accept() {
+    clearInterval(timer);
+    showToast('Commande acceptée ✅');
+    setTimeout(() => navigate('trajet'), 800);
+  }
+
+  function refuse() {
+    clearInterval(timer);
+    showToast('Commande refusée');
+    setTimeout(() => navigate('dashboard', true), 800);
+  }
+</script>
+</body>
+</html>
