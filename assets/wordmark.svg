@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 370 64" width="370" height="64">
+  <!--
+    WORDMARK — TWO-TONE, STANDALONE
+    "Chop" Ink · "Now" Orange · "CM" Orange
+    Use when icon is already present in context (favicon in tab, etc.)
+  -->
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&amp;display=swap');
+    </style>
+  </defs>
+  <text
+    x="0" y="54"
+    font-family="'Plus Jakarta Sans', 'Inter', system-ui, sans-serif"
+    font-size="52" font-weight="700" letter-spacing="-2">
+    <tspan fill="#0F0F0F">Chop</tspan><tspan fill="#E8570A">Now</tspan><tspan fill="#E8570A">CM</tspan>
+  </text>
+</svg>
