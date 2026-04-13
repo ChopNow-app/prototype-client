@@ -1,0 +1,37 @@
+/* ── KEYFRAMES ────────────────────────────────────────────────────────────── */
+@keyframes slide-in-right  { from { transform: translateX(100%) } to { transform: translateX(0) } }
+@keyframes slide-in-left   { from { transform: translateX(-30%) } to { transform: translateX(0) } }
+@keyframes fade-in         { from { opacity: 0 }                  to { opacity: 1 } }
+@keyframes bounce-in       { from { transform: scale(0) rotate(-180deg) } to { transform: scale(1) rotate(0) } }
+@keyframes scale-in        { from { transform: scale(.7); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+@keyframes pill-in         { from { opacity: 0; transform: translateY(20px) scale(.95) } to { opacity: 1; transform: translateY(0) scale(1) } }
+@keyframes ring-in         { from { transform: scale(0) rotate(-180deg) } to { transform: scale(1) rotate(0) } }
+@keyframes spin            { to   { transform: rotate(360deg) } }
+@keyframes shake           { 0%,100% { transform: translateX(0) } 20% { transform: translateX(-6px) } 40% { transform: translateX(6px) } 60% { transform: translateX(-4px) } 80% { transform: translateX(4px) } }
+
+@keyframes dot-pulse {
+  0%, 80%, 100% { background: var(--border2) }
+  40%           { background: var(--orange) }
+}
+@keyframes pulse-ring {
+  0%,100% { box-shadow: 0 0 0 0 rgba(232,87,10,.4) }
+  50%     { box-shadow: 0 0 0 8px rgba(232,87,10,0) }
+}
+@keyframes dash-flow {
+  to { stroke-dashoffset: -20 }
+}
+@keyframes rider-move {
+  0%, 100% { transform: translate(0,0) }
+  50%      { transform: translate(24px,-14px) }
+}
+@keyframes ripple-anim {
+  to { transform: scale(4); opacity: 0 }
+}
+
+/* ── SCREEN ENTRY ─────────────────────────────────────────────────────────── */
+.screen-enter {
+  animation: slide-in-right .35s cubic-bezier(.4,0,.2,1) both;
+}
+.screen-enter-back {
+  animation: slide-in-left .35s cubic-bezier(.4,0,.2,1) both;
+}

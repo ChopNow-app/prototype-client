@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow — Connexion</title>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+  <link rel="stylesheet" href="../css/layout.css"/>
+  <link rel="stylesheet" href="../css/components.css"/>
+  <style>
+    .screen { padding: 36px 24px 40px; justify-content: space-between; }
+    .auth-emoji { font-size: 44px; margin-bottom: 20px; display: block; }
+    .auth-title { font-size: 28px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
+    .auth-sub   { font-size: 15px; color: var(--muted2); line-height: 1.6; margin-bottom: 28px; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+    <div>
+      <span class="auth-emoji">👋</span>
+      <div class="auth-title">Bienvenue<br/>sur ChopNow</div>
+      <div class="auth-sub">Entre ton numéro pour recevoir ton code WhatsApp.</div>
+
+      <div class="phone-wrap">
+        <button class="flag-btn">🇨🇲 +237</button>
+        <input class="phone-input" id="phoneIn" type="tel" placeholder="6XX XXX XXX" maxlength="9" inputmode="numeric"/>
+      </div>
+
+      <div class="info-badge info-badge-green">
+        <span style="font-size:22px;flex-shrink:0">💬</span>
+        <span>Un code à 6 chiffres sera envoyé sur ton <strong>WhatsApp</strong> — gratuit et sécurisé.</span>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="btnContinue" onclick="submit()">Continuer →</button>
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script>
+  function submit() {
+    const val = document.getElementById('phoneIn').value.trim();
+    sessionStorage.setItem('phone', val || '6XX XXX XXX');
+    const btn = document.getElementById('btnContinue');
+    btn.textContent = 'Envoi en cours…';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'Continuer →';
+      btn.disabled = false;
+      navigate('otp');
+      showToast('Code envoyé sur WhatsApp 💬');
+    }, 1400);
+  }
+
+  document.getElementById('phoneIn').addEventListener('keydown', e => {
+    if (e.key === 'Enter') submit();
+  });
+</script>
+</body>
+</html>

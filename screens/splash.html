@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow</title>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+  <link rel="stylesheet" href="../css/layout.css"/>
+  <style>
+    .screen {
+      justify-content: center;
+      align-items: center;
+    }
+    .splash-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 35%, rgba(232,87,10,.15), transparent 65%);
+    }
+    .splash-content {
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      animation: scale-in .8s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .splash-icon {
+      width: 96px; height: 96px;
+      background: linear-gradient(135deg, var(--orange), var(--orange3));
+      border-radius: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 52px;
+      box-shadow: 0 16px 48px rgba(232,87,10,.45);
+    }
+    .splash-logo { font-size: 42px; font-weight: 900; color: var(--text); letter-spacing: -2px; }
+    .splash-logo span { color: var(--orange); }
+    .splash-tag  { font-size: 15px; color: var(--muted2); }
+    .dots { display: flex; gap: 7px; margin-top: 40px; }
+    .dot  { width: 7px; height: 7px; border-radius: 4px; background: var(--border2); animation: dot-pulse 1.4s ease infinite; }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+    <div class="splash-bg"></div>
+    <div class="splash-content">
+      <div class="splash-icon">🍗</div>
+      <div class="splash-logo">Chop<span>Now</span></div>
+      <div class="splash-tag">Livraison rapide à Douala</div>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script>
+  setTimeout(() => navigate('phone'), 2200);
+</script>
+</body>
+</html>

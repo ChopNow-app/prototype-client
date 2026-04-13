@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow — Panier</title>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+  <link rel="stylesheet" href="../css/layout.css"/>
+  <link rel="stylesheet" href="../css/components.css"/>
+  <style>
+    .screen { padding-bottom: 20px; }
+    .cart-list { padding: 8px 20px; display: flex; flex-direction: column; gap: 10px; }
+    .ci { display: flex; align-items: center; gap: 12px; background: var(--card); border-radius: var(--r); padding: 12px 14px; border: 1px solid var(--border); }
+    .ci-ico   { font-size: 38px; width: 52px; text-align: center; flex-shrink: 0; }
+    .ci-body  { flex: 1; }
+    .ci-name  { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .ci-price { font-size: 13px; font-weight: 700; color: var(--orange); }
+    .empty-cart { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--muted2); font-size: 15px; }
+    .empty-cart span { font-size: 56px; }
+    .addr-card { margin: 14px 20px 0; display: flex; gap: 12px; align-items: center; }
+    .addr-ico  { font-size: 22px; }
+    .addr-body { flex: 1; }
+    .addr-lbl  { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 3px; font-weight: 700; }
+    .addr-val  { font-size: 14px; color: var(--text); font-weight: 600; }
+    .addr-chg  { font-size: 13px; color: var(--orange); font-weight: 600; cursor: pointer; }
+    .cart-cta  { padding: 16px 20px 0; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+    <div class="nav-header">
+      <button class="back-btn" onclick="navigate('restaurant', true)">←</button>
+      <span class="nav-title">Mon panier</span>
+    </div>
+
+    <div class="cart-list" id="cartList"></div>
+
+    <div id="cartFull">
+      <hr class="divider"/>
+      <div class="totals">
+        <div class="t-row"><span>Sous-total</span><span id="tSub">—</span></div>
+        <div class="t-row"><span>Livraison 🛵</span><span>500 FCFA</span></div>
+        <div class="t-row"><span>Frais de service</span><span>100 FCFA</span></div>
+        <div class="t-row big"><span>Total</span><span id="tTotal">—</span></div>
+      </div>
+      <div class="addr-card card">
+        <span class="addr-ico">📍</span>
+        <div class="addr-body">
+          <div class="addr-lbl">Adresse de livraison</div>
+          <div class="addr-val">Bonamoussadi, face au lycée</div>
+        </div>
+        <span class="addr-chg">Changer</span>
+      </div>
+      <div class="cart-cta">
+        <button class="btn btn-primary" onclick="navigate('payment')">Passer la commande →</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script src="../js/cart.js"></script>
+<script>
+  function render() {
+    const list = document.getElementById('cartList');
+    const full = document.getElementById('cartFull');
+    const cart = getCart();
+
+    // Demo fill if empty
+    if (Object.keys(cart).length === 0) {
+      addToCart('ndole');
+      addToCart('dg');
+    }
+
+    const entries = Object.entries(getCart());
+    if (entries.length === 0) {
+      list.innerHTML = '<div class="empty-cart"><span>🛒</span><p>Ton panier est vide</p></div>';
+      full.style.display = 'none';
+      return;
+    }
+
+    full.style.display = 'block';
+    list.innerHTML = entries.map(([k, q]) => {
+      const it = MENU_ITEMS[k];
+      if (!it) return '';
+      return `<div class="ci">
+        <span class="ci-ico">${it.icon}</span>
+        <div class="ci-body">
+          <div class="ci-name">${it.name}</div>
+          <div class="ci-price">${fmt(it.price * q)}</div>
+        </div>
+        <div class="qty-wrap">
+          <button class="qb" onclick="chg('${k}',-1)">−</button>
+          <span class="qv">${q}</span>
+          <button class="qb" onclick="chg('${k}',1)">+</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    const sub = getCartTotal();
+    document.getElementById('tSub').textContent   = fmt(sub);
+    document.getElementById('tTotal').textContent = fmt(sub + 600);
+    sessionStorage.setItem('orderTotal', sub + 600);
+  }
+
+  function chg(key, delta) {
+    changeQty(key, delta);
+    render();
+  }
+
+  render();
+</script>
+</body>
+</html>

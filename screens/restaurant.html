@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow — Chez Mama Benz</title>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+  <link rel="stylesheet" href="../css/layout.css"/>
+  <link rel="stylesheet" href="../css/components.css"/>
+  <style>
+    .screen { padding-bottom: 90px; }
+    .hero { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 80px; flex-shrink: 0; position: relative; overflow: hidden; }
+    .hero::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(transparent, var(--bg)); }
+    .hero-back { position: absolute; top: 14px; left: 14px; width: 40px; height: 40px; background: rgba(0,0,0,.55); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; }
+    .hero-fav { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; background: rgba(0,0,0,.55); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; z-index: 2; }
+    .hero-fav.on { background: rgba(232,87,10,.8); border-color: var(--orange); }
+    .resto-hdr { padding: 0 20px 16px; flex-shrink: 0; }
+    .resto-name { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
+    .resto-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .menu-tag { padding: 16px 20px 8px; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; flex-shrink: 0; }
+    .menu-list { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+    <div class="hero g1">
+      🍗
+      <button class="hero-back" onclick="navigate('home', true)">←</button>
+      <button class="hero-fav" id="favBtn" onclick="toggleFav()">🤍</button>
+    </div>
+
+    <div class="resto-hdr">
+      <div class="resto-name">Chez Mama Benz</div>
+      <div class="resto-chips">
+        <span class="chip chip-gold">⭐ 4.7 (128 avis)</span>
+        <span class="chip">⏱ 20–30 min</span>
+        <span class="chip">🛵 500 FCFA</span>
+        <span class="chip chip-green">✅ Ouvert</span>
+      </div>
+    </div>
+
+    <div class="menu-tag">🍽️ Menu du jour</div>
+    <div class="menu-list">
+
+      <div class="mi" id="mi-ndole">
+        <div class="mi-img fb1">🥘</div>
+        <div class="mi-body">
+          <div class="mi-name">Ndolé + poisson braisé</div>
+          <div class="mi-desc">Sauce ndolé maison, poisson fraîchement grillé, plantain mûr</div>
+          <div class="mi-foot">
+            <span class="mi-price">3 500 FCFA</span>
+            <div class="qty-wrap" id="qw-ndole" style="display:none">
+              <button class="qb" onclick="changeItem('ndole',-1)">−</button>
+              <span class="qv" id="qv-ndole">1</span>
+              <button class="qb" onclick="changeItem('ndole',1)">+</button>
+            </div>
+            <button class="add-btn" id="ab-ndole" onclick="addItem('ndole')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mi" id="mi-dg">
+        <div class="mi-img fb2">🍗</div>
+        <div class="mi-body">
+          <div class="mi-name">Poulet DG</div>
+          <div class="mi-desc">Poulet sauté aux légumes, plantain, sauce tomate pimentée</div>
+          <div class="mi-foot">
+            <span class="mi-price">4 500 FCFA</span>
+            <div class="qty-wrap" id="qw-dg" style="display:none">
+              <button class="qb" onclick="changeItem('dg',-1)">−</button>
+              <span class="qv" id="qv-dg">1</span>
+              <button class="qb" onclick="changeItem('dg',1)">+</button>
+            </div>
+            <button class="add-btn" id="ab-dg" onclick="addItem('dg')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mi" id="mi-soya">
+        <div class="mi-img fb3">🍢</div>
+        <div class="mi-body">
+          <div class="mi-name">Soya de bœuf (5 brochettes)</div>
+          <div class="mi-desc">Brochettes grillées épicées, sauce arachide maison</div>
+          <div class="mi-foot">
+            <span class="mi-price">2 000 FCFA</span>
+            <div class="qty-wrap" id="qw-soya" style="display:none">
+              <button class="qb" onclick="changeItem('soya',-1)">−</button>
+              <span class="qv" id="qv-soya">1</span>
+              <button class="qb" onclick="changeItem('soya',1)">+</button>
+            </div>
+            <button class="add-btn" id="ab-soya" onclick="addItem('soya')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mi" id="mi-bissap">
+        <div class="mi-img fb4">🥤</div>
+        <div class="mi-body">
+          <div class="mi-name">Jus de bissap maison</div>
+          <div class="mi-desc">Bissap frais, gingembre, sucre de canne — 50cl</div>
+          <div class="mi-foot">
+            <span class="mi-price">500 FCFA</span>
+            <div class="qty-wrap" id="qw-bissap" style="display:none">
+              <button class="qb" onclick="changeItem('bissap',-1)">−</button>
+              <span class="qv" id="qv-bissap">1</span>
+              <button class="qb" onclick="changeItem('bissap',1)">+</button>
+            </div>
+            <button class="add-btn" id="ab-bissap" onclick="addItem('bissap')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart pill -->
+    <div class="cart-pill" id="cartPill" onclick="navigate('cart')">
+      <div class="cp-left">
+        <span class="cp-count" id="cpCount">1 article</span>
+        <span class="cp-name">Voir mon panier</span>
+      </div>
+      <span class="cp-total" id="cpTotal">3 500 FCFA</span>
+    </div>
+
+    <nav class="bnav">
+      <div class="bni" onclick="navigate('home', true)"><span class="bni-ico">🏠</span><span class="bni-lbl">Accueil</span></div>
+      <div class="bni on" onclick="navigate('cart')"><span class="bni-ico">🛒</span><span class="bni-lbl">Panier</span></div>
+      <div class="bni" onclick="showToast('Mes commandes')"><span class="bni-ico">📦</span><span class="bni-lbl">Commandes</span></div>
+      <div class="bni" onclick="showToast('Mon profil')"><span class="bni-ico">👤</span><span class="bni-lbl">Profil</span></div>
+    </nav>
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script src="../js/cart.js"></script>
+<script>
+  function renderMenu() {
+    const cart = getCart();
+    ['ndole','dg','soya','bissap'].forEach(key => {
+      const qty = cart[key] || 0;
+      const ab  = document.getElementById('ab-' + key);
+      const qw  = document.getElementById('qw-' + key);
+      const qv  = document.getElementById('qv-' + key);
+      const mi  = document.getElementById('mi-' + key);
+      if (qty > 0) {
+        ab.style.display = 'none';
+        qw.style.display = 'flex';
+        qv.textContent   = qty;
+        mi.classList.add('in-cart');
+      } else {
+        ab.style.display = 'flex';
+        qw.style.display = 'none';
+        mi.classList.remove('in-cart');
+      }
+    });
+    updatePill();
+  }
+
+  function addItem(key) {
+    addToCart(key);
+    const mi = document.getElementById('mi-' + key);
+    mi.style.transform = 'scale(1.02)';
+    setTimeout(() => mi.style.transform = '', 180);
+    renderMenu();
+    showToast(MENU_ITEMS[key].name + ' ajouté 🛒');
+  }
+
+  function changeItem(key, delta) {
+    changeQty(key, delta);
+    renderMenu();
+  }
+
+  function updatePill() {
+    const count = getCartCount();
+    const pill  = document.getElementById('cartPill');
+    if (count > 0) {
+      pill.style.display = 'flex';
+      document.getElementById('cpCount').textContent = count + ' article' + (count > 1 ? 's' : '');
+      document.getElementById('cpTotal').textContent = fmt(getCartTotal());
+    } else {
+      pill.style.display = 'none';
+    }
+  }
+
+  function toggleFav() {
+    const btn = document.getElementById('favBtn');
+    const on  = btn.classList.toggle('on');
+    btn.textContent = on ? '❤️' : '🤍';
+    showToast(on ? 'Ajouté aux favoris ❤️' : 'Retiré des favoris');
+  }
+
+  renderMenu();
+</script>
+</body>
+</html>
