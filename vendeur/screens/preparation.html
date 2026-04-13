@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow Vendeur — Préparation</title>
+  <link rel="stylesheet" href="../../css/base.css"/>
+  <link rel="stylesheet" href="../../css/animations.css"/>
+  <link rel="stylesheet" href="../../css/layout.css"/>
+  <link rel="stylesheet" href="../../css/components.css"/>
+  <style>
+    .screen { padding: 24px 20px 32px; justify-content: space-between; }
+
+    /* Order header */
+    .order-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .order-hdr-id   { font-size: 22px; font-weight: 900; color: var(--text); }
+    .order-hdr-sub  { font-size: 13px; color: var(--muted2); margin-top: 2px; }
+    .order-hdr-time {
+      text-align: center;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 8px 14px;
+    }
+    .timer-val { font-size: 22px; font-weight: 900; color: var(--orange); font-variant-numeric: tabular-nums; }
+    .timer-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+    /* Items checklist */
+    .checklist { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 20px; }
+    .check-head { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; background: var(--card2); }
+    .check-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s; }
+    .check-item:last-child { border-bottom: none; }
+    .check-item:active { background: var(--card2); }
+    .check-box {
+      width: 28px; height: 28px; border-radius: 8px;
+      border: 2px solid var(--border2); background: var(--card2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 16px; transition: all .2s;
+    }
+    .check-item.done .check-box { background: rgba(34,197,94,.15); border-color: #22c55e; }
+    .check-item.done .check-name { text-decoration: line-through; color: var(--muted); }
+    .check-name { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; transition: color .2s; }
+    .check-qty  { font-size: 13px; color: var(--muted2); }
+    .progress-row { padding: 10px 16px; display: flex; align-items: center; gap: 10px; background: var(--card2); }
+    .prog-bar  { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .prog-fill { height: 100%; background: linear-gradient(90deg, #16a34a, #22c55e); border-radius: 3px; transition: width .4s ease; }
+    .prog-lbl  { font-size: 12px; font-weight: 700; color: var(--muted2); white-space: nowrap; }
+
+    /* Status steps */
+    .status-steps { display: flex; gap: 0; margin-bottom: 20px; }
+    .sstep { flex: 1; text-align: center; position: relative; }
+    .sstep:not(:last-child)::after { content: ''; position: absolute; top: 14px; left: 50%; width: 100%; height: 2px; background: var(--border); z-index: 0; }
+    .sstep.done::after { background: #22c55e; }
+    .sstep-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--card2); border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; margin: 0 auto 6px; position: relative; z-index: 1;
+      transition: all .3s;
+    }
+    .sstep.done .sstep-dot  { background: rgba(34,197,94,.15); border-color: #22c55e; }
+    .sstep.now  .sstep-dot  { background: rgba(232,87,10,.15); border-color: var(--orange); box-shadow: 0 0 10px rgba(232,87,10,.3); animation: pulse-ring 2s ease infinite; }
+    .sstep-lbl { font-size: 10px; color: var(--muted); font-weight: 600; }
+    .sstep.done .sstep-lbl, .sstep.now .sstep-lbl { color: var(--text); }
+
+    /* CTA */
+    .btn-ready { width: 100%; padding: 17px; background: linear-gradient(135deg, #16a34a, #22c55e); border: none; border-radius: var(--r); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 28px rgba(34,197,94,.35); transition: transform .1s, opacity .2s; }
+    .btn-ready:active { transform: scale(.97); }
+    .btn-ready:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+
+    <div>
+      <div class="order-hdr">
+        <div>
+          <div class="order-hdr-id">Commande #4872</div>
+          <div class="order-hdr-sub">Kouamé Brice · 4 000 FCFA</div>
+        </div>
+        <div class="order-hdr-time">
+          <div class="timer-val" id="timerVal">00:00</div>
+          <div class="timer-lbl">En préparation</div>
+        </div>
+      </div>
+
+      <!-- Status steps -->
+      <div class="status-steps">
+        <div class="sstep done">
+          <div class="sstep-dot">✅</div>
+          <div class="sstep-lbl">Acceptée</div>
+        </div>
+        <div class="sstep now" id="sstep1">
+          <div class="sstep-dot">🍳</div>
+          <div class="sstep-lbl">Préparation</div>
+        </div>
+        <div class="sstep" id="sstep2">
+          <div class="sstep-dot">✓</div>
+          <div class="sstep-lbl">Prête</div>
+        </div>
+        <div class="sstep" id="sstep3">
+          <div class="sstep-dot">🏍️</div>
+          <div class="sstep-lbl">Livreur</div>
+        </div>
+      </div>
+
+      <!-- Checklist articles -->
+      <div class="checklist">
+        <div class="check-head">Articles à préparer</div>
+        <div class="check-item" id="ci0" onclick="toggleCheck(0)">
+          <div class="check-box" id="cb0"></div>
+          <span class="check-name">Ndolé + poisson braisé</span>
+          <span class="check-qty">×1</span>
+        </div>
+        <div class="check-item" id="ci1" onclick="toggleCheck(1)">
+          <div class="check-box" id="cb1"></div>
+          <span class="check-name">Jus de bissap maison</span>
+          <span class="check-qty">×1</span>
+        </div>
+        <div class="progress-row">
+          <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+          <span class="prog-lbl" id="progLbl">0 / 2 prêts</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-ready" id="btnReady" onclick="markReady()" disabled>
+      Commande prête — Appeler livreur 🏍️
+    </button>
+
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script>
+  // Timer
+  let seconds = 0;
+  const timerEl = document.getElementById('timerVal');
+  setInterval(() => {
+    seconds++;
+    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    timerEl.textContent = `${m}:${s}`;
+  }, 1000);
+
+  // Checklist
+  const checked = [false, false];
+
+  function toggleCheck(i) {
+    checked[i] = !checked[i];
+    const item = document.getElementById('ci' + i);
+    const box  = document.getElementById('cb' + i);
+    if (checked[i]) {
+      item.classList.add('done');
+      box.textContent = '✓';
+    } else {
+      item.classList.remove('done');
+      box.textContent = '';
+    }
+    const count = checked.filter(Boolean).length;
+    const pct   = (count / checked.length) * 100;
+    document.getElementById('progFill').style.width = pct + '%';
+    document.getElementById('progLbl').textContent  = `${count} / ${checked.length} prêts`;
+    document.getElementById('btnReady').disabled = count < checked.length;
+  }
+
+  function markReady() {
+    // Advance status steps
+    document.getElementById('sstep1').className = 'sstep done';
+    document.getElementById('sstep1').querySelector('.sstep-dot').textContent = '✅';
+    document.getElementById('sstep2').className = 'sstep done';
+    document.getElementById('sstep2').querySelector('.sstep-dot').textContent = '✅';
+    document.getElementById('sstep3').className = 'sstep now';
+
+    document.getElementById('btnReady').textContent = 'Livreur en route 🏍️';
+    document.getElementById('btnReady').disabled = true;
+    showToast('Livreur notifié — en route vers toi ✅');
+    setTimeout(() => navigate('dashboard', true), 2000);
+  }
+</script>
+</body>
+</html>

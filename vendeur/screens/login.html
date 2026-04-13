@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow Vendeur — Connexion</title>
+  <link rel="stylesheet" href="../../css/base.css"/>
+  <link rel="stylesheet" href="../../css/animations.css"/>
+  <link rel="stylesheet" href="../../css/layout.css"/>
+  <link rel="stylesheet" href="../../css/components.css"/>
+  <style>
+    .screen { padding: 36px 24px 40px; justify-content: space-between; }
+    .auth-logo { width: 52px; height: 52px; border-radius: 14px; overflow: hidden; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(232,87,10,.35); }
+    .auth-logo svg { width: 100%; height: 100%; display: block; }
+    .auth-title { font-size: 28px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
+    .auth-sub   { font-size: 15px; color: var(--muted2); line-height: 1.6; margin-bottom: 28px; }
+    .vendor-badge {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.2);
+      border-radius: var(--r); padding: 14px 16px; margin-bottom: 20px;
+    }
+    .vendor-badge-ico  { font-size: 28px; }
+    .vendor-badge-text { font-size: 13px; color: var(--muted2); line-height: 1.5; }
+    .vendor-badge-text strong { color: #fbbf24; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+    <div>
+      <div class="auth-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <defs>
+            <radialGradient id="heat2" cx="38%" cy="32%" r="70%">
+              <stop offset="0%" stop-color="#FF6520"/>
+              <stop offset="55%" stop-color="#E8570A"/>
+              <stop offset="100%" stop-color="#C04008"/>
+            </radialGradient>
+          </defs>
+          <rect width="512" height="512" rx="112" fill="url(#heat2)"/>
+          <path d="M 256,432 C 210,372 116,308 116,194 A 140,140 0 0 0 396,194 C 396,308 302,372 256,432 Z" fill="white"/>
+          <path d="M 305,153 A 64,64 0 1 0 305,235" stroke="#0F0F0F" stroke-width="62" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="auth-title">Espace<br/>Restaurant</div>
+      <div class="auth-sub">Connecte-toi pour gérer tes commandes.</div>
+
+      <div class="vendor-badge">
+        <span class="vendor-badge-ico">🍽️</span>
+        <div class="vendor-badge-text">Réservé aux restaurants <strong>ChopNow partenaires</strong>.<br/>Pas encore partenaire ? Contacte-nous.</div>
+      </div>
+
+      <div class="phone-wrap">
+        <button class="flag-btn">🇨🇲 +237</button>
+        <input class="phone-input" id="phoneIn" type="tel" placeholder="6XX XXX XXX" maxlength="9" inputmode="numeric"/>
+      </div>
+
+      <div class="info-badge info-badge-green">
+        <span style="font-size:22px;flex-shrink:0">💬</span>
+        <span>Code à 6 chiffres envoyé sur ton <strong>WhatsApp</strong>.</span>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="btnContinue" onclick="submit()">Continuer →</button>
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script>
+  function submit() {
+    const btn = document.getElementById('btnContinue');
+    btn.textContent = 'Envoi en cours…';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'Continuer →';
+      btn.disabled = false;
+      navigate('dashboard');
+      showToast('Code envoyé sur WhatsApp 💬');
+    }, 1400);
+  }
+  document.getElementById('phoneIn').addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+</script>
+</body>
+</html>

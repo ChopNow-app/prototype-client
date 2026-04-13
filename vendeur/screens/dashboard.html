@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow Vendeur — Dashboard</title>
+  <link rel="stylesheet" href="../../css/base.css"/>
+  <link rel="stylesheet" href="../../css/animations.css"/>
+  <link rel="stylesheet" href="../../css/layout.css"/>
+  <link rel="stylesheet" href="../../css/components.css"/>
+  <style>
+    .screen { padding-bottom: 0; }
+
+    /* Header */
+    .dash-header { padding: 18px 20px 14px; flex-shrink: 0; }
+    .dash-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .resto-name  { font-size: 20px; font-weight: 900; color: var(--text); }
+    .resto-sub   { font-size: 12px; color: var(--muted2); margin-top: 2px; }
+
+    /* Open/Close toggle */
+    .open-toggle {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 50px; cursor: pointer;
+      border: 1px solid var(--border); background: var(--card);
+      transition: all .2s;
+    }
+    .open-toggle.ouvert { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.3); }
+    .open-toggle.ferme  { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.25); }
+    .toggle-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); transition: background .2s; }
+    .open-toggle.ouvert .toggle-dot { background: #22c55e; box-shadow: 0 0 7px rgba(34,197,94,.6); }
+    .open-toggle.ferme  .toggle-dot { background: #ef4444; }
+    .toggle-lbl { font-size: 13px; font-weight: 700; color: var(--muted); transition: color .2s; }
+    .open-toggle.ouvert .toggle-lbl { color: #22c55e; }
+    .open-toggle.ferme  .toggle-lbl { color: #ef4444; }
+
+    /* Stats */
+    .stats-row { display: flex; gap: 10px; padding: 0 20px 16px; flex-shrink: 0; }
+    .stat-card { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 13px 10px; text-align: center; }
+    .stat-val { font-size: 19px; font-weight: 900; color: var(--orange); }
+    .stat-lbl { font-size: 10px; color: var(--muted2); margin-top: 3px; }
+
+    /* Revenue bar */
+    .rev-card { margin: 0 20px 16px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; flex-shrink: 0; }
+    .rev-top  { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .rev-title { font-size: 13px; font-weight: 700; color: var(--text); }
+    .rev-val   { font-size: 18px; font-weight: 900; color: var(--orange); }
+    .rev-bar   { height: 6px; background: var(--card2); border-radius: 4px; overflow: hidden; }
+    .rev-fill  { height: 100%; background: linear-gradient(90deg, #c94a00, var(--orange)); border-radius: 4px; width: 68%; }
+    .rev-sub   { display: flex; justify-content: space-between; margin-top: 7px; font-size: 11px; color: var(--muted2); }
+
+    /* Section */
+    .sec { padding: 0 20px 0; flex-shrink: 0; }
+    .sec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .sec-title  { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    .sec-action { font-size: 13px; color: var(--orange); font-weight: 600; cursor: pointer; }
+
+    /* Order card */
+    .ord-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 14px; margin-bottom: 10px;
+      cursor: pointer; transition: border-color .15s;
+    }
+    .ord-card:active { border-color: var(--orange); }
+    .ord-card.new-order { border-color: rgba(232,87,10,.3); background: linear-gradient(135deg, #160800, var(--card)); }
+    .ord-top  { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .ord-id   { font-size: 13px; font-weight: 800; color: var(--text); }
+    .ord-time { font-size: 11px; color: var(--muted2); }
+    .ord-items { font-size: 13px; color: var(--muted2); margin-bottom: 8px; line-height: 1.5; }
+    .ord-foot { display: flex; justify-content: space-between; align-items: center; }
+    .ord-total { font-size: 15px; font-weight: 800; color: var(--orange); }
+    .ord-status {
+      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+    }
+    .status-new     { background: rgba(232,87,10,.15); color: var(--orange); }
+    .status-prep    { background: rgba(251,191,36,.12); color: #fbbf24; }
+    .status-ready   { background: rgba(34,197,94,.12); color: #22c55e; }
+
+    .new-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(232,87,10,.15); border: 1px solid rgba(232,87,10,.3); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: var(--orange); margin-bottom: 10px; }
+    .new-dot   { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); animation: dot-pulse 1s ease infinite; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+
+    <div class="dash-header">
+      <div class="dash-top">
+        <div>
+          <div class="resto-name">Chez Mama Benz 🍗</div>
+          <div class="resto-sub">Bonamoussadi · Douala</div>
+        </div>
+        <div class="open-toggle ouvert" id="openToggle" onclick="toggleOpen()">
+          <div class="toggle-dot"></div>
+          <span class="toggle-lbl" id="openLbl">Ouvert</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">14</div>
+        <div class="stat-lbl">Commandes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">47</div>
+        <div class="stat-lbl">Plats vendus</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">4.7⭐</div>
+        <div class="stat-lbl">Note resto</div>
+      </div>
+    </div>
+
+    <div class="rev-card">
+      <div class="rev-top">
+        <span class="rev-title">💰 Revenus du jour</span>
+        <span class="rev-val">68 500 FCFA</span>
+      </div>
+      <div class="rev-bar"><div class="rev-fill"></div></div>
+      <div class="rev-sub">
+        <span>68 500 gagnés</span>
+        <span>Objectif : 100 000 FCFA</span>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-header">
+        <span class="sec-title">Commandes en cours</span>
+        <span class="sec-action" onclick="navigate('menu')">🍽️ Mon menu →</span>
+      </div>
+
+      <div class="new-badge"><div class="new-dot"></div> Nouvelle commande</div>
+
+      <div class="ord-card new-order" onclick="navigate('commande')">
+        <div class="ord-top">
+          <span class="ord-id">#4872 · Kouamé Brice</span>
+          <span class="ord-time">À l'instant</span>
+        </div>
+        <div class="ord-items">• Ndolé + poisson braisé × 1<br/>• Jus de bissap × 1</div>
+        <div class="ord-foot">
+          <span class="ord-total">4 000 FCFA</span>
+          <span class="ord-status status-new">⏳ En attente</span>
+        </div>
+      </div>
+
+      <div class="ord-card" onclick="showToast('Commande #4865 en préparation')">
+        <div class="ord-top">
+          <span class="ord-id">#4865 · Adjoua Martine</span>
+          <span class="ord-time">Il y a 8 min</span>
+        </div>
+        <div class="ord-items">• Poulet DG × 2<br/>• Jus de bissap × 2</div>
+        <div class="ord-foot">
+          <span class="ord-total">10 000 FCFA</span>
+          <span class="ord-status status-prep">🍳 En préparation</span>
+        </div>
+      </div>
+
+      <div class="ord-card" onclick="showToast('Commande #4858 prête')">
+        <div class="ord-top">
+          <span class="ord-id">#4858 · Bertrand K.</span>
+          <span class="ord-time">Il y a 22 min</span>
+        </div>
+        <div class="ord-items">• Soya de bœuf × 3</div>
+        <div class="ord-foot">
+          <span class="ord-total">6 000 FCFA</span>
+          <span class="ord-status status-ready">✅ Prête</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script>
+  let isOpen = true;
+
+  function toggleOpen() {
+    isOpen = !isOpen;
+    const toggle = document.getElementById('openToggle');
+    const lbl    = document.getElementById('openLbl');
+    if (isOpen) {
+      toggle.className = 'open-toggle ouvert';
+      lbl.textContent  = 'Ouvert';
+      showToast('Restaurant ouvert ✅');
+    } else {
+      toggle.className = 'open-toggle ferme';
+      lbl.textContent  = 'Fermé';
+      showToast('Restaurant fermé 🔴');
+    }
+  }
+</script>
+</body>
+</html>

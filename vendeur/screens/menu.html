@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#E8570A"/>
+  <title>ChopNow Vendeur — Mon Menu</title>
+  <link rel="stylesheet" href="../../css/base.css"/>
+  <link rel="stylesheet" href="../../css/animations.css"/>
+  <link rel="stylesheet" href="../../css/layout.css"/>
+  <link rel="stylesheet" href="../../css/components.css"/>
+  <style>
+    .screen { padding-bottom: 0; }
+
+    /* Header */
+    .menu-hdr { padding: 18px 20px 14px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .back-btn  { width: 38px; height: 38px; background: var(--card2); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; flex-shrink: 0; }
+    .menu-hdr-title { font-size: 20px; font-weight: 900; flex: 1; }
+    .menu-count { font-size: 13px; color: var(--muted2); }
+
+    /* Category tabs */
+    .tabs { display: flex; gap: 8px; padding: 0 20px 14px; overflow-x: auto; flex-shrink: 0; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab { padding: 7px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 1px solid var(--border); color: var(--muted2); background: var(--card); transition: all .15s; }
+    .tab.on { background: rgba(232,87,10,.12); border-color: rgba(232,87,10,.3); color: var(--orange); }
+
+    /* Menu items */
+    .menu-list { padding: 0 20px; flex: 1; overflow-y: auto; }
+    .menu-list::-webkit-scrollbar { display: none; }
+
+    .mitem {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 14px; margin-bottom: 10px;
+      transition: opacity .2s, border-color .2s;
+    }
+    .mitem.off { opacity: .5; }
+    .mitem-img { width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 30px; flex-shrink: 0; }
+    .mitem-body { flex: 1; min-width: 0; }
+    .mitem-name  { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .mitem-price { font-size: 13px; font-weight: 800; color: var(--orange); }
+    .mitem-stock { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+
+    /* Toggle switch */
+    .toggle-sw { position: relative; width: 44px; height: 26px; flex-shrink: 0; cursor: pointer; }
+    .toggle-sw input { display: none; }
+    .toggle-track {
+      width: 44px; height: 26px; border-radius: 13px;
+      background: var(--card3); border: 1px solid var(--border2);
+      transition: background .2s, border-color .2s;
+      display: flex; align-items: center;
+    }
+    .toggle-sw input:checked + .toggle-track { background: rgba(34,197,94,.2); border-color: #22c55e; }
+    .toggle-thumb {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--muted); margin-left: 2px;
+      transition: transform .2s, background .2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    }
+    .toggle-sw input:checked + .toggle-track .toggle-thumb { transform: translateX(18px); background: #22c55e; }
+
+    /* Stock badge */
+    .stock-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 4px; }
+    .stock-ok  { background: rgba(34,197,94,.1); color: #22c55e; }
+    .stock-low { background: rgba(251,191,36,.1); color: #fbbf24; }
+    .stock-out { background: rgba(239,68,68,.1); color: #ef4444; }
+
+    /* Bottom add button */
+    .add-menu-btn { margin: 12px 20px 20px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons"><span>▲▲</span><span>📶</span><span>🔋</span></div>
+  </div>
+  <div class="screen">
+
+    <div class="menu-hdr">
+      <button class="back-btn" onclick="navigate('dashboard', true)">←</button>
+      <span class="menu-hdr-title">Mon Menu</span>
+      <span class="menu-count">4 plats</span>
+    </div>
+
+    <div class="tabs">
+      <div class="tab on" onclick="setTab(this)">Tout</div>
+      <div class="tab" onclick="setTab(this)">Plats</div>
+      <div class="tab" onclick="setTab(this)">Boissons</div>
+    </div>
+
+    <div class="menu-list">
+
+      <div class="mitem" id="mitem0">
+        <div class="mitem-img" style="background:#3a1a00">🥘</div>
+        <div class="mitem-body">
+          <div class="mitem-name">Ndolé + poisson braisé</div>
+          <div class="mitem-price">3 500 FCFA</div>
+          <span class="stock-badge stock-ok">✅ En stock</span>
+        </div>
+        <label class="toggle-sw">
+          <input type="checkbox" checked onchange="toggleItem(0, this.checked)"/>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </label>
+      </div>
+
+      <div class="mitem" id="mitem1">
+        <div class="mitem-img" style="background:#0a2a0a">🍗</div>
+        <div class="mitem-body">
+          <div class="mitem-name">Poulet DG</div>
+          <div class="mitem-price">4 500 FCFA</div>
+          <span class="stock-badge stock-ok">✅ En stock</span>
+        </div>
+        <label class="toggle-sw">
+          <input type="checkbox" checked onchange="toggleItem(1, this.checked)"/>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </label>
+      </div>
+
+      <div class="mitem" id="mitem2">
+        <div class="mitem-img" style="background:#2a0a0a">🍢</div>
+        <div class="mitem-body">
+          <div class="mitem-name">Soya de bœuf (5 brochettes)</div>
+          <div class="mitem-price">2 000 FCFA</div>
+          <span class="stock-badge stock-low">⚠️ Stock faible</span>
+        </div>
+        <label class="toggle-sw">
+          <input type="checkbox" checked onchange="toggleItem(2, this.checked)"/>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </label>
+      </div>
+
+      <div class="mitem off" id="mitem3">
+        <div class="mitem-img" style="background:#0a0a2a">🥤</div>
+        <div class="mitem-body">
+          <div class="mitem-name">Jus de bissap maison</div>
+          <div class="mitem-price">500 FCFA</div>
+          <span class="stock-badge stock-out">🔴 Rupture</span>
+        </div>
+        <label class="toggle-sw">
+          <input type="checkbox" onchange="toggleItem(3, this.checked)"/>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="add-menu-btn">
+      <button class="btn btn-secondary" onclick="showToast('Ajout de plat — bientôt disponible')">+ Ajouter un plat</button>
+    </div>
+
+  </div>
+</div>
+<script src="../js/app.js"></script>
+<script>
+  function toggleItem(i, on) {
+    const item = document.getElementById('mitem' + i);
+    if (on) {
+      item.classList.remove('off');
+      showToast('Plat activé ✅');
+    } else {
+      item.classList.add('off');
+      showToast('Plat désactivé — masqué des clients');
+    }
+  }
+
+  function setTab(el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    el.classList.add('on');
+  }
+</script>
+</body>
+</html>
