@@ -14,6 +14,7 @@ const SCREENS = [
   { id: 'payment',    label: 'Paiement',   path: 'payment.html'    },
   { id: 'tracking',   label: 'Suivi',      path: 'tracking.html'   },
   { id: 'delivered',  label: 'Livré',      path: 'delivered.html'  },
+  { id: 'profile',    label: 'Profil',     path: 'profile.html'    },
 ];
 
 // Determine current screen from filename
