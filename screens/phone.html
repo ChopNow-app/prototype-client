@@ -12,7 +12,7 @@
   <style>
     .screen { padding: 36px 24px 40px; justify-content: space-between; }
     .auth-logo { width: 52px; height: 52px; border-radius: 14px; overflow: hidden; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(232,87,10,.35); }
-    .auth-logo img { width: 100%; height: 100%; display: block; }
+    .auth-logo svg { width: 100%; height: 100%; display: block; }
     .auth-title { font-size: 28px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
     .auth-sub   { font-size: 15px; color: var(--muted2); line-height: 1.6; margin-bottom: 28px; }
   </style>
@@ -25,7 +25,21 @@
   </div>
   <div class="screen">
     <div>
-      <div class="auth-logo"><img src="../assets/icon.svg" alt="ChopNow"/></div>
+      <div class="auth-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <defs>
+            <radialGradient id="heat2" cx="38%" cy="32%" r="70%">
+              <stop offset="0%" stop-color="#FF6520"/>
+              <stop offset="55%" stop-color="#E8570A"/>
+              <stop offset="100%" stop-color="#C04008"/>
+            </radialGradient>
+          </defs>
+          <rect width="512" height="512" rx="112" fill="url(#heat2)"/>
+          <path d="M 256,432 C 210,372 116,308 116,194 A 140,140 0 0 0 396,194 C 396,308 302,372 256,432 Z" fill="white"/>
+          <path d="M 305,153 A 64,64 0 1 0 305,235" stroke="#0F0F0F" stroke-width="62" stroke-linecap="round" fill="none"/>
+          <path d="M 300,150 C 280,126 307,110 290,86" stroke="rgba(232,87,10,0.62)" stroke-width="9" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
       <div class="auth-title">Bienvenue<br/>sur ChopNow</div>
       <div class="auth-sub">Entre ton numéro pour recevoir ton code WhatsApp.</div>
 
