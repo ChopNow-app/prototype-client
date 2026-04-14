@@ -23,8 +23,11 @@ body {
 
 @media (max-width: 420px) {
   body { background: var(--bg); align-items: flex-start; }
-  .phone { width: 100vw; height: 100dvh; border-radius: 0; box-shadow: none; min-height: 100dvh; }
-  .status-bar { padding-top: max(12px, env(safe-area-inset-top)); height: auto; min-height: 48px; }
+  .phone {
+    width: 100vw; height: 100dvh; border-radius: 0; box-shadow: none; min-height: 100dvh;
+    padding-top: env(safe-area-inset-top); /* let OS status bar show through */
+  }
+  .status-bar { display: none; } /* phone has its own — hide the fake one */
   .bnav { padding-bottom: max(16px, env(safe-area-inset-bottom)); height: auto; min-height: 84px; }
 }
 
