@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ChopNow — Installer les prototypes</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0D0400;
+      color: #fff;
+      font-family: -apple-system, system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px 60px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .header-logo {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .header-logo span { color: #E8570A; }
+    .header-sub {
+      font-size: 15px;
+      color: rgba(255,255,255,.45);
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #1A0A02;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px;
+      padding: 32px 28px;
+      width: 280px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(232,87,10,.12);
+      border: 1px solid rgba(232,87,10,.25);
+      border-radius: 24px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #E8570A;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,.45);
+      line-height: 1.5;
+    }
+
+    .qr-wrap {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      display: inline-block;
+    }
+
+    .card-url {
+      font-size: 11px;
+      color: rgba(255,255,255,.3);
+      word-break: break-all;
+      line-height: 1.4;
+    }
+
+    .install-steps {
+      background: rgba(255,255,255,.04);
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: left;
+      width: 100%;
+    }
+    .install-steps p {
+      font-size: 12px;
+      color: rgba(255,255,255,.5);
+      line-height: 1.8;
+    }
+    .install-steps strong { color: rgba(255,255,255,.75); }
+
+    .footer {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 12px;
+      color: rgba(255,255,255,.2);
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Chop<span>Now</span><span style="font-size:20px">CM</span></div>
+  <div class="header-sub">Scanne → installe le prototype sur ton téléphone</div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-badge">📱 Client</div>
+    <div class="card-title">App Client</div>
+    <div class="card-desc">Commander des plats, suivre la livraison, payer via MoMo</div>
+    <div class="qr-wrap" id="qr-client"></div>
+    <div class="card-url">chopnow-app.github.io/prototype-client/</div>
+    <div class="install-steps">
+      <p>
+        <strong>iPhone :</strong> Scanner → Safari → ⎙ → Sur l'écran d'accueil<br>
+        <strong>Android :</strong> Scanner → Chrome → ⋮ → Ajouter à l'écran
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-badge">🏍️ Livreur</div>
+    <div class="card-title">App Livreur</div>
+    <div class="card-desc">Accepter les commandes, suivre le trajet, confirmer la livraison</div>
+    <div class="qr-wrap" id="qr-livreur"></div>
+    <div class="card-url">chopnow-app.github.io/prototype-client/livreur/</div>
+    <div class="install-steps">
+      <p>
+        <strong>iPhone :</strong> Scanner → Safari → ⎙ → Sur l'écran d'accueil<br>
+        <strong>Android :</strong> Scanner → Chrome → ⋮ → Ajouter à l'écran
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-badge">🍽️ Vendeur</div>
+    <div class="card-title">App Vendeur</div>
+    <div class="card-desc">Gérer les commandes, préparer les plats, gérer le menu</div>
+    <div class="qr-wrap" id="qr-vendeur"></div>
+    <div class="card-url">chopnow-app.github.io/prototype-client/vendeur/</div>
+    <div class="install-steps">
+      <p>
+        <strong>iPhone :</strong> Scanner → Safari → ⎙ → Sur l'écran d'accueil<br>
+        <strong>Android :</strong> Scanner → Chrome → ⋮ → Ajouter à l'écran
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">ChopNow — Prototypes internes · Ne pas partager publiquement</div>
+
+<script>
+  const urls = {
+    'qr-client':  'https://chopnow-app.github.io/prototype-client/',
+    'qr-livreur': 'https://chopnow-app.github.io/prototype-client/livreur/',
+    'qr-vendeur': 'https://chopnow-app.github.io/prototype-client/vendeur/',
+  };
+
+  Object.entries(urls).forEach(([id, url]) => {
+    new QRCode(document.getElementById(id), {
+      text: url,
+      width: 180,
+      height: 180,
+      colorDark: '#0D0400',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M,
+    });
+  });
+</script>
+</body>
+</html>
