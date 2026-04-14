@@ -92,7 +92,9 @@
 </div>
 <script src="../js/app.js"></script>
 <script>
-  setTimeout(() => navigate('phone'), 3500);
+  showInstallOverlay('ChopNow', () => {
+    setTimeout(() => navigate('phone'), 3500);
+  });
 </script>
 </body>
 </html>
