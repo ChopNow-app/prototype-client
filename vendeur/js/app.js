@@ -97,8 +97,8 @@ window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); _def
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').catch(() => {});
 
 function showInstallOverlay(appName, onDone) {
-  if (window.matchMedia('(display-mode: standalone)').matches) { onDone(); return; }
-  if (window.innerWidth > 420) { onDone(); return; }
+  if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) { onDone(); return; }
+  if (window.innerWidth > 768 && window.matchMedia('(hover: hover)').matches) { onDone(); return; }
   if (localStorage.getItem('installDismissed')) { onDone(); return; }
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   if (!isIOS && !_deferredInstall) { onDone(); return; }

@@ -132,9 +132,9 @@ if ('serviceWorker' in navigator) {
 
 function showInstallOverlay(appName, onDone) {
   // Already installed as PWA — skip
-  if (window.matchMedia('(display-mode: standalone)').matches) { onDone(); return; }
+  if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) { onDone(); return; }
   // Desktop — skip
-  if (window.innerWidth > 420) { onDone(); return; }
+  if (window.innerWidth > 768 && window.matchMedia('(hover: hover)').matches) { onDone(); return; }
   // Already dismissed this session — skip
   if (localStorage.getItem('installDismissed')) { onDone(); return; }
 

@@ -21,14 +21,19 @@ body {
   flex-direction: column;
 }
 
-@media (max-width: 420px) {
+/* Mobile: any touch device or narrow screen */
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
   body { background: var(--bg); align-items: flex-start; }
   .phone {
     width: 100vw; height: 100dvh; border-radius: 0; box-shadow: none; min-height: 100dvh;
-    padding-top: env(safe-area-inset-top); /* let OS status bar show through */
+    padding-top: env(safe-area-inset-top);
   }
-  .status-bar { display: none; } /* phone has its own — hide the fake one */
+  .status-bar { display: none; } /* OS has its own real status bar */
   .bnav { padding-bottom: max(16px, env(safe-area-inset-bottom)); height: auto; min-height: 84px; }
+}
+/* Keep desktop frame on wide screens */
+@media (min-width: 769px) and (hover: hover) {
+  .proto-nav { display: flex; }
 }
 
 /* ── STATUS BAR ───────────────────────────────────────────────────────────── */
