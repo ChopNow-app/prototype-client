@@ -159,34 +159,32 @@ function showInstallOverlay(appName, onDone) {
   overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.75);display:flex;align-items:flex-end;';
 
   if (isIOS) {
+    const step = (n, title, sub) => `
+      <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border-radius:12px;padding:12px 14px">
+        <div style="background:rgba(232,87,10,.15);border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:900;color:#E8570A">${n}</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#fff">${title}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">${sub}</div>
+        </div>
+      </div>`;
     overlay.innerHTML = `
-      <div style="background:#1A0A02;border-radius:24px 24px 0 0;padding:32px 24px 48px;width:100%;border-top:1px solid rgba(255,255,255,.1)">
-        <div style="text-align:center;margin-bottom:24px">
-          <div style="font-size:44px;margin-bottom:10px">📲</div>
-          <div style="font-size:19px;font-weight:900;color:#fff;margin-bottom:6px">Installer ${appName}</div>
-          <div style="font-size:13px;color:rgba(255,255,255,.45)">Accès direct depuis ton écran d'accueil</div>
+      <div style="background:#1A0A02;border-radius:24px 24px 0 0;padding:28px 24px 44px;width:100%;border-top:1px solid rgba(255,255,255,.1)">
+        <div style="text-align:center;margin-bottom:20px">
+          <div style="font-size:40px;margin-bottom:8px">📲</div>
+          <div style="font-size:18px;font-weight:900;color:#fff;margin-bottom:4px">Installer ${appName}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4)">Suis les 4 étapes ci-dessous</div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
-          <div style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.05);border-radius:14px;padding:14px 16px">
-            <div style="font-size:26px;flex-shrink:0">1</div>
-            <div>
-              <div style="font-size:14px;font-weight:700;color:#fff">Appuie sur <span style="color:#E8570A">⎙</span> en bas de Safari</div>
-              <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:2px">Le bouton "Partager"</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.05);border-radius:14px;padding:14px 16px">
-            <div style="font-size:26px;flex-shrink:0">2</div>
-            <div>
-              <div style="font-size:14px;font-weight:700;color:#fff">Appuie sur <span style="color:#E8570A">"Sur l'écran d'accueil"</span></div>
-              <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:2px">Fais défiler la liste vers le bas</div>
-            </div>
-          </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+          ${step(1, 'Appuie sur <span style="color:#E8570A">•••</span> en bas à droite', 'Les 3 points dans la barre Safari')}
+          ${step(2, 'Appuie sur <span style="color:#E8570A">Partager ⎙</span>', 'Dans le menu qui apparaît')}
+          ${step(3, 'Appuie sur <span style="color:#E8570A">Plus d\'options</span>', 'L\'icône en bas du menu de partage')}
+          ${step(4, 'Appuie sur <span style="color:#E8570A">Sur l\'écran d\'accueil ➕</span>', 'Confirme en haut à droite')}
         </div>
-        <button id="_installDismiss" style="width:100%;padding:15px;background:rgba(232,87,10,.12);border:1px solid rgba(232,87,10,.3);border-radius:14px;color:#E8570A;font-size:15px;font-weight:700;cursor:pointer">
+        <button id="_installDismiss" style="width:100%;padding:14px;background:rgba(232,87,10,.12);border:1px solid rgba(232,87,10,.3);border-radius:14px;color:#E8570A;font-size:14px;font-weight:700;cursor:pointer">
           J'ai compris ✓
         </button>
       </div>
-      <div style="position:absolute;bottom:12px;left:50%;animation:_bounce 1.2s ease infinite;font-size:28px">⬇️</div>`;
+      <div style="position:absolute;bottom:12px;left:50%;animation:_bounce 1.2s ease infinite;font-size:26px">⬇️</div>`;
     overlay.querySelector('#_installDismiss').onclick = dismiss;
 
   } else {
