@@ -21,11 +21,18 @@ const SCREENS = [
 const currentFile = location.pathname.split('/').pop() || 'splash.html';
 const currentScreen = SCREENS.find(s => s.path === currentFile) || SCREENS[0];
 
+// ─── SESSION GUARD — redirect to splash if fresh PWA open ────────────────────
+// sessionStorage is cleared when PWA is closed, so if no flag exists we're fresh
+if (!sessionStorage.getItem('chopnow_active') && currentFile !== 'splash.html') {
+  location.replace('splash.html');
+}
+
 // ─── NAVIGATION ──────────────────────────────────────────────────────────────
 function navigate(screenId, isBack = false) {
   const target = SCREENS.find(s => s.id === screenId);
   if (!target) return;
 
+  sessionStorage.setItem('chopnow_active', '1');
   sessionStorage.setItem('navDirection', isBack ? 'back' : 'forward');
 
   const screen = document.querySelector('.screen');
