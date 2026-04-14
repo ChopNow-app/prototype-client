@@ -136,7 +136,7 @@ function showInstallOverlay(appName, onDone) {
   // Desktop — skip
   if (window.innerWidth > 420) { onDone(); return; }
   // Already dismissed this session — skip
-  if (sessionStorage.getItem('installDismissed')) { onDone(); return; }
+  if (localStorage.getItem('installDismissed')) { onDone(); return; }
 
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   if (!isIOS && !_deferredInstall) { onDone(); return; }

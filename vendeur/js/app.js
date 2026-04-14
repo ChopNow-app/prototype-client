@@ -99,7 +99,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').c
 function showInstallOverlay(appName, onDone) {
   if (window.matchMedia('(display-mode: standalone)').matches) { onDone(); return; }
   if (window.innerWidth > 420) { onDone(); return; }
-  if (sessionStorage.getItem('installDismissed')) { onDone(); return; }
+  if (localStorage.getItem('installDismissed')) { onDone(); return; }
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   if (!isIOS && !_deferredInstall) { onDone(); return; }
   if (!document.getElementById('_installStyle')) {
@@ -107,7 +107,7 @@ function showInstallOverlay(appName, onDone) {
     s.textContent = '@keyframes _bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}';
     document.head.appendChild(s);
   }
-  const dismiss = () => { sessionStorage.setItem('installDismissed','1'); overlay.remove(); onDone(); };
+  const dismiss = () => { localStorage.setItem('installDismissed','1'); overlay.remove(); onDone(); };
   const overlay = document.createElement('div');
   overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.75);display:flex;align-items:flex-end;';
   if (isIOS) {
