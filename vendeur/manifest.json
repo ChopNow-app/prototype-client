@@ -1,0 +1,25 @@
+{
+  "name": "ChopNow Vendeur",
+  "short_name": "Vendeur",
+  "description": "ChopNow — interface vendeur",
+  "start_url": "/prototype-client/vendeur/",
+  "scope": "/prototype-client/vendeur/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#E8570A",
+  "background_color": "#0D0400",
+  "icons": [
+    {
+      "src": "../assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
