@@ -4,6 +4,8 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  touch-action: manipulation;   /* remove 300ms tap delay on Android */
+  overscroll-behavior: none;    /* prevent pull-to-refresh in browser */
 }
 
 .phone {
@@ -24,12 +26,37 @@ body {
 /* Mobile: any touch device or narrow screen */
 @media (max-width: 768px), (hover: none) and (pointer: coarse) {
   body { background: var(--bg); align-items: flex-start; }
+
   .phone {
-    width: 100vw; height: 100dvh; border-radius: 0; box-shadow: none; min-height: 100dvh;
+    width: 100vw;
+    height: 100dvh;
+    min-height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+    overscroll-behavior: none;
+    /* push content below the iOS notch / Android status bar */
     padding-top: env(safe-area-inset-top);
   }
-  .status-bar { display: none; } /* OS has its own real status bar */
-  .bnav { padding-bottom: max(16px, env(safe-area-inset-bottom)); height: auto; min-height: 84px; }
+
+  /* OS shows its own real status bar — hide the prototype one */
+  .status-bar { display: none; }
+
+  /* Bottom nav: grow to cover iOS home indicator & Android nav bar */
+  .bnav {
+    height: auto;
+    min-height: 84px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  /*
+   * Screens that have a .bnav sibling must add matching bottom space so
+   * the last content row is never hidden behind the (taller) nav bar.
+   * :has() is supported in Chrome 105+ and Safari 15.4+ — covers all
+   * modern Android and iOS devices.
+   */
+  .phone:has(.bnav) .screen {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+  }
 }
 /* Keep desktop frame on wide screens */
 @media (min-width: 769px) and (hover: hover) {
@@ -68,6 +95,8 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   background: var(--bg);
+  -webkit-overflow-scrolling: touch; /* momentum scroll on older iOS */
+  overscroll-behavior-y: contain;   /* prevent page-level bounce bleed */
 }
 .screen::-webkit-scrollbar { display: none; }
 

@@ -50,4 +50,5 @@ html, body {
   background: #000;
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;  /* prevent Android pull-to-refresh & iOS bounce */
 }
